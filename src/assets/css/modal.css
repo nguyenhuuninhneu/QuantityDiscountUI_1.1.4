@@ -1,0 +1,19 @@
+.create-update-limit-purchase .item {
+    float: left;
+    width: calc((100% - 30px) / 2);
+}
+
+.create-update-limit-purchase .item:last-child {
+    margin-left: 30px;
+}
+
+.create-update-limit-purchase .rule-max-zero {
+    margin-top: 5px;
+    color: #6D7175;
+    display: block;
+}
+
+.Polaris-DisplayText--sizeSmall {
+    text-align: left;
+    font-size: 16px;
+}

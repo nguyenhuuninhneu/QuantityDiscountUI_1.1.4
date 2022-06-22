@@ -1,0 +1,127 @@
+.setting .section:nth-child(1){
+    margin-top: 20px;
+}
+.setting .section .colLeft,.setting .section .colRight{
+    width: calc((100% - 50px) / 2);
+}
+.setting .section .colLeft {
+    margin-right: 50px;
+}
+.setting .section.general .colLeft .Polaris-ButtonGroup__Item:nth-child(2n){
+    margin-left: 0;
+}
+.setting .section.general .colLeft .Polaris-ButtonGroup__Item:nth-child(1) .Polaris-Button{
+    border-radius: 0.4rem 0 0 0.4rem;
+}
+.setting .section.general .colLeft .Polaris-ButtonGroup__Item:nth-child(2) .Polaris-Button{
+    border-radius: 0 0.4rem 0.4rem 0;
+}
+.setting .section.general .activate button.Polaris-Button{
+    background:inherit;
+}
+.setting .section.general .activate .Polaris-CalloutCard__Title{
+    margin-bottom: 8px;
+}
+.setting .section.general .activate .Polaris-CalloutCard__Buttons{
+    margin-top: 8px;
+}
+.setting .section.install-uninstall .itemLeft,.setting .section.install-uninstall .itemRight {
+    float: left;
+}
+
+.setting .section.install-uninstall .itemLeft{
+    width: 80%;
+    margin-right: 15px;
+}
+.setting .section.install-uninstall .itemRight{
+    width: calc((20% - 15px));
+}
+
+.setting .section.custom-rule .itemLeft,.setting .section.custom-rule .itemRight {
+    float: left;
+    margin-top: 20px;
+}
+
+.setting .section.custom-rule .itemLeft{
+    width: 20%;
+    margin-right: 50px;
+    padding-top: 6px;
+}
+.setting .section.custom-rule .itemRight{
+    width: calc((80% - 50px));
+}
+
+.setting .discount-feature .colLeft{
+    width: 60%;
+    margin-right: 10px;
+}
+.setting .discount-feature .colRight{
+    width: calc(40% - 10px);
+}
+
+.only-text{
+    padding: 7px 0;    
+}
+
+.group-fill-text .item{
+    margin: 10px 0;
+}
+.group-fill-text .item .col{
+    float: left;
+}
+.group-fill-text .item .col1{
+    width: calc(25% - 10px);
+    margin-right: 10px;
+    padding-top: 6px;
+}
+.group-fill-text .item .col2{
+    width: 8%;
+    margin-right: 10px;
+    padding-top: 7px;
+}
+.group-fill-text .item .col3{
+    width: calc(67% - 10px);
+}
+
+.group-fill-text2 .item2{
+    width:578px;
+    display:flex;
+    align-items: center;
+    vertical-align: middle;
+}
+.group-fill-text2 .item2 img{
+    width: 220px;
+}
+.group-col-half .item .title{
+    padding: 5px 0;
+}
+
+.group-col-half .item .itemLeft,
+.group-col-half .item .itemRight{
+    float: left;
+    width: calc((100% - 20px) /2);
+}
+.group-col-half .item .itemLeft{
+    margin-right: 20px;
+}
+.break-line{
+    padding: 4px 0;
+}
+
+.setting .limit-purchase-feature .colLeft{
+    width: 60%;
+    margin-right: 10px;
+}
+.setting .limit-purchase-feature .colRight{
+    width: calc(40% - 10px);
+}
+
+.update-cart{
+    margin-top: 15px;
+    padding-top: 15px;
+    text-align: center;
+    border-top: 1px solid #E1E3E5;
+}
+.setting .Polaris-Frame-ContextualSaveBar{
+    margin-bottom: 10px;
+  }

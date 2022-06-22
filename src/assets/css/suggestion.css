@@ -1,0 +1,288 @@
+.suggestion {
+    background-color: #fff;
+}
+
+.suggestion .feature-show{
+    top: 0;
+    left: 5px;
+    transition: 0.5s all ease-in-out; -moz-transition: 0.5s all ease-in-out;
+}
+.suggestion .feature-hide{
+    top: -100%  !important;
+    transition: 0.5s all ease-in-out; -moz-transition: 0.5s all ease-in-out;
+   
+}
+@keyframes slidein {
+    from {
+        top:-100%;
+    }
+  
+    to {
+        top:0;
+    }
+  }
+  @keyframes slideout {
+    from {
+        top:0;
+    }
+  
+    to {
+        top:-100%;
+    }
+  }
+.tag-horizontal:hover img{
+    width: 6.5rem;
+    transition: 0.5s all ease-in-out; -moz-transition: 0.5s all ease-in-out;
+}
+.tag-horizontal:not(:hover) img{
+    transition: 0.5s all ease-out; -moz-transition: 0.5s all ease-out;
+}
+.tag-horizontal img{
+    width: 5.5rem;
+}
+
+.suggestion .feature-fixed{
+    background-color: #fff;
+    position: fixed;
+    top:0;
+    width: 30%;
+    height: 85%;
+    box-shadow: 0 3px 10px rgb(0 0 0 / 20%);
+    margin: 3px;
+    border-radius: 10px;
+}
+
+.suggestion .Polaris-Card__Section{
+    padding: 1.5rem 1.5rem;
+}
+
+ .suggestion .feature-show {
+    top: 4% !important; 
+    z-index: 999999999;
+}
+.suggestion .header {
+    margin-top:40px;
+}
+.suggestion .header .block-light{
+    text-align:center;
+    background: #008060;
+    padding: 4px 0;
+    position: relative;
+}
+.suggestion .header .block-light .title{
+    color: #fff;
+    font-weight: 700;
+    padding-left: 20px;
+    padding-right: 50px;
+    font-size: 2.5rem;
+    padding-top: 6px;
+    padding-bottom: 6px;
+    box-sizing: border-box;
+}
+.suggestion .header .block-light .image{
+    padding-right: 2px;
+    position: absolute;
+    top: -85%;
+    right: 4%;
+}
+.suggestion .header .label{
+    font-style: italic;
+    text-align: right;
+    margin-top: 5px;
+    margin-right: 15px;
+    color: #000;
+}
+.suggestion .new-feature::-webkit-scrollbar {
+    width: 5px;
+}
+ 
+.suggestion .new-feature::-webkit-scrollbar-track {
+    background-color: #e4e4e4;
+    border-radius: 100px;
+}
+ 
+.suggestion .new-feature::-webkit-scrollbar-thumb {
+    background-color: #008060;
+    border-radius: 100px;
+}
+
+.suggestion .new-feature .Polaris-Card{
+    border-radius: 0;
+    box-shadow: none;
+}
+
+.suggestion .new-feature .search-featrue ul{
+    padding-left: 18px;
+    margin-top: 0;
+}
+.suggestion .new-feature .tag-feature{
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.suggestion .new-feature .tag-feature .Polaris-Button--primary{
+    box-shadow: 0px 5px 0px rgb(0 0 0 / 8%), inset 0px -5px 0px rgb(0 0 0 / 20%);
+    border-radius: 10px;
+    padding-top: 10px;
+    padding-bottom: 13px;
+}
+
+.suggestion .new-feature p span,
+.suggestion .new-feature .tag-feature span{
+    font-weight: 500;
+}
+.suggestion .new-feature .tag-feature a{
+    text-decoration: none;
+    color:#008060;
+    font-weight: 700;
+    padding-left: 2px;
+    font-size: 20px;
+}
+.suggestion .new-feature .tag-feature a:hover{
+    box-shadow: #fff;
+}
+.suggestion .dismiss{
+    position: absolute;
+    bottom: -8%;
+    left: 50%;
+    transform: translateX(-50%);
+    margin-bottom: 5px;
+}
+.suggestion .tag-dismiss{
+    margin: auto;
+    padding: 5px;
+    border-radius: 50%;
+    display: block;
+    box-shadow: 0 3px 10px rgb(0 0 0 / 20%);
+    z-index: 9999;
+}
+.suggestion .dismiss img{
+    width: 20px;
+    margin-top: 4px;
+    margin-left: 4px;
+    margin-right: 4px;
+    margin-bottom: 0;
+}
+
+.suggestion .new-feature .list-feature{
+    max-height: 325px;
+   overflow-y: scroll;
+   box-sizing: border-box;
+   margin-top: 20px;
+}
+.suggestion .new-feature .list-feature .item-feature{
+    position: relative;
+    padding: 20px 5px;
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    border-left: 2px solid #008060;
+    box-shadow: 0 3px 10px rgb(0 0 0 / 20%);
+    margin: 3px;
+    margin-bottom: 20px;
+
+}
+.suggestion .new-feature .list-feature .item-feature .vote-number{
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    padding: 3px;
+    background-color: #008060;
+    line-height: 16px;
+    color: #fff;
+    font-weight: 500;
+    width: 60px;
+    text-align: center;
+    font-size: 12px;
+    border-radius: 5px;
+}
+.suggestion .new-feature .list-feature .item-feature .your-suggestion{
+    position: absolute;
+    bottom: 5px;
+    right: 5px;
+    background-color: #008060;
+    color: #fff;
+    font-weight: 500;
+    font-size: 12px;
+    padding: 0 6px;
+    border-radius: 5px;
+}
+.suggestion .new-feature .list-feature::-webkit-scrollbar {
+    width: 5px;
+}
+ 
+.suggestion .new-feature .list-feature::-webkit-scrollbar-track {
+    background-color: #e4e4e4;
+    border-radius: 100px;
+}
+ 
+.suggestion .new-feature .list-feature::-webkit-scrollbar-thumb {
+    background-color: #008060;
+    border-radius: 100px;
+}
+.suggestion .new-feature .list-feature .item-feature:last-child{
+    margin-bottom: 5px;
+}
+.suggestion .new-feature .list-feature .item-feature .left{
+    width: 15%;
+    font-size: 20px;
+    text-align: center;
+}
+.suggestion .new-feature .list-feature .item-feature .left .green svg{
+    color: #188061;
+}
+.suggestion .new-feature .list-feature .item-feature .left .gray svg{
+    color: #5C5F62;
+}
+.suggestion .new-feature .list-feature .item-feature .right{
+    width: calc(100% - 15%);
+}
+.suggestion .new-feature .list-feature .item-feature .right .title{
+    font-weight: bold;
+    font-size: 14px;
+    margin-bottom: 5px;
+    width: 85%;
+    overflow: hidden;
+    height: 16px;
+    line-height: 16px;
+}
+.suggestion .new-feature .list-feature .item-feature .right .description{
+    font-size: 12px;
+    width: 90%;
+}
+.suggestion .new-feature .feature-show{
+    display: block;
+}
+.suggestion .new-feature .feature-hide{
+    display: none;
+}
+
+.suggestion .new-feature .form-add-feature .Polaris-Heading{
+    font-weight: bold;
+    font-size: 2rem;
+    text-align: center;
+}
+.valid{
+    color: red;
+}
+.suggestion .new-feature .Polaris-Button--primary{
+    float: right;
+}
+
+.suggestion .new-feature hr{
+    color: #EEE;
+    width: 90%;
+    margin: auto;
+    margin-bottom: 30px;
+    margin-top: 30px;
+}
+.suggestion .new-feature textarea{
+    max-height: 106px;
+}
+
+/* view more */
+.my-anchor-css-class{
+    text-decoration: none;
+    color: #008060;
+}

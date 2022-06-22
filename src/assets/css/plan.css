@@ -1,0 +1,59 @@
+.plan {
+    width: 90%;
+    padding-top: 5%;
+    margin: auto;
+}
+.plan .table-plan{
+    border: 1px solid #008060;
+    border-radius: 8px;
+}
+.plan .table-plan .header{
+    background-color: #EBF9FC;
+    border-radius: 8px 8px 0 0;
+}
+.plan .table-plan .header .item{
+    padding: 20px 15px;
+    font-weight: 500;
+font-size: 16px;
+}
+
+.plan .table-plan .item{
+    padding: 20px 15px;
+    font-size: 14px;
+}
+
+.plan .table-plan .body .item{
+    border-bottom: 1px solid rgba(0, 0, 0, 0.25);
+}
+.plan .table-plan .body .item.price{
+    border-bottom: 1px solid #008060;
+    font-weight: 400;
+    font-size: 26px;
+}
+
+.plan .table-plan .body .Polaris-Icon svg path{
+    fill: #008060;
+}
+.plan .table-plan .item .col{
+    float: left;
+}
+.plan .table-plan .item .col1{
+    width: 40%;
+    margin-right: 10px;
+}
+.plan .table-plan .item .col2{
+    width: calc((60% / 3) - 10px);
+    margin-right: 10px;
+    text-align: center;
+}
+.plan .table-plan .item .col3{
+    width: calc((60% / 3) - 10px);
+    text-align: center;
+}
+.plan .table-plan .item .col4{
+    width: calc((60% / 3) - 10px);
+    text-align: center;
+}
+.plan .table-plan .body .item.action{
+    padding: 12px 15px;
+}
