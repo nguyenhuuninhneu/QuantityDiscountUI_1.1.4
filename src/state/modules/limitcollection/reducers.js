@@ -11,7 +11,7 @@ const INITIAL_STATE = {
     IsSaveLoading: false,
     IsDeleteLoading: false,
     IsPaginateLoading: false,
-
+    IsCheckAllLimitCollection: false,
     Paginate: {
       CurrentItems: [],
       TotalPage: 1,
@@ -28,6 +28,7 @@ const INITIAL_STATE = {
       ApplyLimitCustomerLifetime: false
     },
     IsOpenCreateUpdateModal: false,
+    IsOpenBulkActionModal: false,
     limitcollection: {
       ID: 0,
       Title: '',
@@ -362,6 +363,133 @@ const reducer = (state = INITIAL_STATE, action) => {
           IsPaginateLoading: action.payload,
         }
       };
+    case types.SAVE_BULKACTIONCOLLECTIONCOMPLETED:
+
+      var listCollectCodeAdd = action.payload.listCollect;
+      var CurrentItems = [];
+      var ListLimit = [];
+
+      switch (action.payload.BulkAction) {
+        case moreAppConfig.BulkAction.DisabledSelected:
+          CurrentItems = state.ListLimitCollection.Paginate.CurrentItems.map((p, i) =>
+          (listCollectCodeAdd.includes(p.CollectCode) ?
+            {
+              ...p,
+              ID: action.payload.listLimitCollectionUpdate.filter(k => k.CollectID == p.CollectCode)[0]?.ID,
+              IsEnabled: action.payload.listLimitCollectionUpdate.filter(k => k.CollectID == p.CollectCode)[0]?.IsEnabled,
+              IsChecked: false,
+            }
+            : p)
+          );
+          ListLimit = state.ListLimitCollection.limitcollections.map((p, i) => (listCollectCodeAdd.includes(p.CollectCode) ?
+            {
+              ...p,
+              ID: action.payload.listLimitCollectionUpdate.filter(k => k.CollectID == p.CollectCode)[0]?.ID,
+              IsEnabled: action.payload.listLimitCollectionUpdate.filter(k => k.CollectID == p.CollectCode)[0]?.IsEnabled,
+              IsChecked: false,
+            }
+            : p));
+          break;
+        case moreAppConfig.BulkAction.EnabledSelected:
+          CurrentItems = state.ListLimitCollection.Paginate.CurrentItems.map((p, i) =>
+          (listCollectCodeAdd.includes(p.CollectCode) ?
+            {
+              ...p,
+              ID: action.payload.listLimitCollectionUpdate.filter(k => k.CollectID == p.CollectCode)[0]?.ID,
+              IsEnabled: action.payload.listLimitCollectionUpdate.filter(k => k.CollectID == p.CollectCode)[0]?.IsEnabled,
+              IsChecked: false,
+            }
+            : p)
+          );
+          ListLimit = state.ListLimitCollection.limitcollections.map((p, i) => (listCollectCodeAdd.includes(p.CollectCode) ?
+            {
+              ...p,
+              ID: action.payload.listLimitCollectionUpdate.filter(k => k.CollectID == p.CollectCode)[0]?.ID,
+              IsEnabled: action.payload.listLimitCollectionUpdate.filter(k => k.CollectID == p.CollectCode)[0]?.IsEnabled,
+              IsChecked: false,
+            }
+            : p));
+          break;
+        case moreAppConfig.BulkAction.DeleteAllSelected:
+          CurrentItems = state.ListLimitCollection.Paginate.CurrentItems.map((p, i) =>
+          (listCollectCodeAdd.includes(p.CollectCode) ?
+            {
+              ...p,
+              ID: null,
+              Min: null,
+              Max: null,
+              LimitTypeMin: 0,
+              LimitTypeMax: 0,
+              ApplyLimitCustomerLifetime: false,
+              IsChecked: false,
+            }
+            : p)
+          );
+          ListLimit = state.ListLimitCollection.limitcollections.map((p, i) => (listCollectCodeAdd.includes(p.CollectCode) ?
+            {
+              ...p,
+              ID: null,
+              Min: null,
+              Max: null,
+              LimitTypeMin: 0,
+              LimitTypeMax: 0,
+              ApplyLimitCustomerLifetime: false,
+              IsChecked: false,
+            }
+            : p));
+          break;
+        default:
+          break;
+      }
+
+      return {
+        ...state,
+        ListLimitCollection: {
+          ...state.ListLimitCollection,
+          // ListProductHaveLimit: newArray,
+          IsLoadingPage: false,
+          IsSaveLoading: false,
+          IsCheckAllLimitCollection: false,
+          Paginate: {
+            ...state.ListLimitCollection.Paginate,
+            CurrentItems: CurrentItems,
+          },
+          limitcollections: ListLimit,
+        },
+        CreateUpdateLimitCollection: {
+          ...state.CreateUpdateLimitCollection,
+          IsOpenSaveToolbar: !action.payload.IsSuccess,
+          IsOpenSaveResult: true,
+          IsOpenCreateUpdateModal: false,
+          IsOpenSetLimitBulkActionModal: false,
+          IsOpenBulkActionModal: false,
+          BulkUpdate: {
+            ListCollects: null,
+            Min: 0,
+            Max: 0,
+            ApplyLimitCustomerLifetime: false
+          },
+          MessageSaveResult: action.payload.IsSuccess ? 'Bulk action is saved successfully.' : action.payload.Message,
+        }
+      };
+    case types.SAVE_BULKACTIONCOLLECTIONFAILED:
+      return {
+        ...state,
+        ListLimitCollection: {
+          ...state.ListLimitCollection,
+          IsSaveLoading: false,
+        },
+        CreateUpdateLimitCollection: {
+          ...state.CreateUpdateLimitCollection,
+          IsOpenSaveToolbar: false,
+          IsLoadingPage: false,
+          IsOpenSaveResult: true,
+          IsOpenCreateUpdateModal: false,
+          IsOpenBulkActionModal: false,
+          MessageSaveResult: action.payload.Message,
+        }
+      };
+
     default:
       return state;
   }

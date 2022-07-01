@@ -1,6 +1,6 @@
 const config = {
-    //rootLink: "http://localhost:57238",
-    rootLink: "https://test-discount.orichi.info",
+    rootLink: "http://localhost:57238",
+    //rootLink: "https://test-discount.orichi.info",
     version: 1,
     shop: OTGetUrlParameter("shop"),
     token: OTGetUrlParameter("token"),

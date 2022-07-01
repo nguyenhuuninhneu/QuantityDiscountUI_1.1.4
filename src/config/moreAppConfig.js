@@ -61,6 +61,12 @@ const moreAppConfig = {
         { label: 'Limit quantity', value: 0 },
         { label: 'Litmit value purchase', value: 1 },
     ],
-    CollectNameValidationText:'Collection name is required.'
+    CollectNameValidationText:'Collection name is required.',
+    BulkAction: {
+        SetLimitPurchase : 0,
+        DisabledSelected: 1,
+        EnabledSelected: 2,
+        DeleteAllSelected: 3
+    },
 }
 export default moreAppConfig;

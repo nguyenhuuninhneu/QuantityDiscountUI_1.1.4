@@ -2,9 +2,9 @@ import { Card, Badge, InlineError, Button, Modal, Toast, TextContainer, Icon, Te
 import axios from 'axios';
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { setCreateUpdateLimitCollection, setListLimitCollection, setSetting, setIsDeleteLoading,setIsPaginateLoading } from '../../state/modules/limitcollection/actions';
+import { setCreateUpdateLimitCollection, setListLimitCollection, setSetting, setIsDeleteLoading, setIsPaginateLoading } from '../../state/modules/limitcollection/actions';
 import config from '../../config/config';
-import { createEditLimitCollection, fetchList, saveLimitCollection, saveBulkLimitCollection } from '../../state/modules/limitcollection/operations';
+import { createEditLimitCollection, fetchList, saveLimitCollection, saveBulkActionCollection } from '../../state/modules/limitcollection/operations';
 import { DeleteMinor, EditMinor, QuestionMarkMajor } from '@shopify/polaris-icons';
 import moreAppConfig from '../../config/moreAppConfig';
 import '../../assets/css/paginate.css';
@@ -26,7 +26,10 @@ const LimitCollection = () => {
     const [IsOpenAdSpecificCollectionModal, setIsOpenAddSpecificCollectionModal] = useState(false);
     //search by button and enter
     const [isSearchLoading, setIsSearchLoading] = useState(false);
+
+    const [BulkActionType, setBulkActionType] = useState("delete");
     const [isHover, setIsHover] = useState(false);
+    const [isHoverAction, setIsHoverAction] = useState(false);
     useEffect(() => {
 
         dispatch(fetchList());
@@ -91,6 +94,7 @@ const LimitCollection = () => {
                         CurrentItems: result.list,
                         TotalPage: result.totalpage
                     },
+                    IsCheckAllLimitCollection: false,
                     TotalLimitCollection: result.totalitem,
                     TotalHaveLimitCollection: result.totalitemhavelimit
                 }))
@@ -153,6 +157,7 @@ const LimitCollection = () => {
                                         TotalPage: result.totalpage
                                     },
                                     IsDeleteLoading: false,
+                                    IsCheckAllLimitCollection: false,
                                     TotalLimitCollection: result.totalitem,
                                     TotalHaveLimitCollection: result.totalitemhavelimit
                                 }))
@@ -206,7 +211,7 @@ const LimitCollection = () => {
                         Offset: 0,
                         CurrentItems: result.list,
                         TotalPage: result.totalpage
-                    },
+                    }, IsCheckAllLimitCollection: false,
                     TotalLimitCollection: result.totalitem,
                     //TotalHaveLimitCollection: result.totalitemhavelimit,
                 }))
@@ -351,6 +356,90 @@ const LimitCollection = () => {
             },
         }))
     };
+
+
+    const openDialogBulkAction = (type) => {
+        setIsHoverAction(false);
+        let str = 'delete';
+        switch (type) {
+            case moreAppConfig.BulkAction.SetLimitPurchase:
+                str = 'setlimit';
+                break;
+            case moreAppConfig.BulkAction.DisabledSelected:
+                str = 'disable';
+                break;
+            case moreAppConfig.BulkAction.EnabledSelected:
+                str = 'enable';
+                break;
+            case moreAppConfig.BulkAction.DeleteAllSelected:
+                str = 'delete';
+                break;
+            default:
+                break;
+        }
+        setBulkActionType(str);
+        dispatch(setCreateUpdateLimitCollection({
+            ...createLimitCollectionState,
+            IsOpenBulkActionModal: true
+        }))
+
+    }
+
+    function handleBulkAction() {
+        let type = moreAppConfig.BulkAction.DisabledSelected;
+        switch (BulkActionType) {
+            case 'setlimit':
+                type = moreAppConfig.BulkAction.SetLimitPurchase;
+                break;
+            case 'disable':
+                type = moreAppConfig.BulkAction.DisabledSelected;
+                break;
+            case 'enable':
+                type = moreAppConfig.BulkAction.EnabledSelected;
+                break;
+            case 'delete':
+                type = moreAppConfig.BulkAction.DeleteAllSelected;
+                break;
+            default:
+                break;
+        }
+        dispatch(saveBulkActionCollection(type));
+    }
+
+    function UpdateEnabledStatus(limitcollection) {
+        dispatch(setIsPaginateLoading(true));
+        axios.post(config.rootLink + '/FrontEnd/UpdateLimitCollectionEnabled', { id: limitcollection.ID, shop: config.shop, status: limitcollection.IsEnabled })
+            .then(function (response) {
+                if (response.data.IsSuccess) {
+
+                    dispatch(setListLimitCollection({
+                        ...limitCollectionState,
+                        Paginate: {
+                            ...limitCollectionState.Paginate,
+                            CurrentItems: limitCollectionState.Paginate.CurrentItems.map((p, i) => (p.CollectCode == limitcollection.CollectCode ? {
+                                ...p,
+                                IsEnabled: !limitcollection.IsEnabled,
+                            } : p)),
+                        },
+                        IsPaginateLoading: false
+                    }))
+                    
+                    setAlert(<Toast content={'The limit: ' + limitcollection.Title + ' update status successfully'} duration={2400} onDismiss={() => {
+                        setAlert(null);
+                    }} />);
+                } else {
+                    setAlert(<Toast content={response.data.Messenger} duration={2400} onDismiss={() => {
+                        setAlert(null);
+                    }} />);
+                    dispatch(setIsPaginateLoading(false));
+                }
+
+            })
+            .catch(function (error) {
+                // handle error
+                console.log(error);
+            })
+    }
     return (
 
         <>
@@ -426,68 +515,262 @@ const LimitCollection = () => {
                     <p style={{ margin: '10px 0' }}>Total : {limitCollectionState.TotalLimitCollection} collections</p>
 
                     <div className='campaign-product-list-content'>
-                    {
+                        {
                             limitCollectionState.IsPaginateLoading ? <SpinnerAbsolute></SpinnerAbsolute> : null
-                       }
+                        }
                         <Card>
-                            <DataTable
-                                columnContentTypes={[
-                                    'text',
-                                    'text',
-                                    '',
-                                ]}
-                                headings={[
-                                    'Collections',
-                                    'Limit purchase',
-                                    'Action'
-                                ]}
-                                // footerContent={`Showing ${currentItems.length} of ${limitCollectionState..length} results`}
-                                rows={limitCollectionState.Paginate.CurrentItems != null && limitCollectionState.Paginate.CurrentItems.length > 0 ? limitCollectionState.Paginate.CurrentItems.map((limitcollection, index) => {
-                                    return [
-                                        <>
-                                            <p key={index}>
-                                                {limitcollection.CollectName}
-                                                {/* <a href={'https://' + appState?.Shop?.Domain + '/products/' + limitcollection.Handle} target="_blank"></a> */}
-                                            </p>
-                                        </>
-                                        ,
-                                        <>
-                                            {
-                                                limitcollection.Min !== undefined && limitcollection.Min !== null && limitcollection.Max !== undefined && limitcollection.Max !== null ?
-                                                    <List type="bullet">
-                                                        <List.Item>Min: {limitcollection.Min} {limitcollection.LimitTypeMin === 0 ? 'items' : (limitCollectionState.Setting !== null && limitCollectionState.Setting !== undefined ? limitCollectionState.Setting.Currency : 'USD')}</List.Item>
-                                                        <List.Item>Max: {limitcollection.Max === 0 ? 'Unlimited' : limitcollection.Max + ' '+ (limitcollection.LimitTypeMax === 0 ? 'items' : (limitCollectionState.Setting !== null && limitCollectionState.Setting !== undefined ? limitCollectionState.Setting.Currency : 'USD'))} </List.Item>
-                                                        <>
-                                                            {
-                                                                limitcollection.ApplyLimitCustomerLifetime ? <List.Item>Limit to customer lifetime</List.Item> : ''
-                                                            }
 
-                                                        </>
-                                                    </List> : null
-                                            }</>
-                                        ,
-                                        <>
-                                            {
-                                                limitcollection.ID === null || limitcollection.ID === 0 ? <>
-                                                    <Button
-                                                        onClick={() => { setIsBulkUpdate(false); onClickCreateUpdateLimitCollection(limitcollection); }} accessibilityLabel="Add limit">Add limit</Button>
-                                                </> :
-                                                    <>
-                                                        <div className='group-button-merge'>
-                                                            <Button icon={EditMinor}
-                                                                onClick={() => { setIsBulkUpdate(false); onClickCreateUpdateLimitCollection(limitcollection); }} accessibilityLabel="Edit" />
-                                                            <Button icon={DeleteMinor}
-                                                                onClick={() => { setIsBulkUpdate(false); onClickDeleteLimitCollection(limitcollection) }} accessibilityLabel="Remove item" />
+                            <div className="Polaris-DataTable--condensed">
+                                {
+                                    limitCollectionState.Paginate.CurrentItems.filter(p => p.IsChecked).length > 0 ? <>
+                                        <div className="Polaris-IndexTable__StickyTable" role="presentation">
+                                            <div>
+                                                <div className="Polaris-IndexTable__BulkActionsWrapper">
+                                                    <div>
+                                                        <div className="Polaris-BulkActions__Group Polaris-BulkActions__Group--largeScreen Polaris-BulkActions__Group--entered">
+                                                            <div className="Polaris-BulkActions__ButtonGroupWrapper">
+                                                                <div className="Polaris-ButtonGroup Polaris-ButtonGroup--segmented" data-buttongroup-segmented="true">
+                                                                    <div className="Polaris-ButtonGroup__Item" onMouseDown={(e) => {
+                                                                        ;
+                                                                        var e = !limitCollectionState.IsCheckAllLimitCollection;
+                                                                        var result = limitCollectionState.Paginate.CurrentItems.map((p, i) => (true ? {
+                                                                            ...p,
+                                                                            IsChecked: e,
+                                                                        } : p))
+                                                                        dispatch(setListLimitCollection({
+                                                                            ...limitCollectionState,
+                                                                            Paginate: {
+                                                                                ...limitCollectionState.Paginate,
+                                                                                CurrentItems: result,
+                                                                            },
+                                                                            IsCheckAllLimitCollection: e
+                                                                        }))
+                                                                    }}>
+                                                                        <div className="Polaris-CheckableButton Polaris-CheckableButton__CheckableButton--selectMode Polaris-CheckableButton__CheckableButton--selected">
+                                                                            <div className="Polaris-CheckableButton__Checkbox">
+                                                                                <label className="Polaris-Choice Polaris-Choice--labelHidden" for="PolarisCheckbox3">
+                                                                                    <span className="Polaris-Choice__Control">
+                                                                                        <span className="Polaris-Checkbox">
+                                                                                            <input id="PolarisCheckbox3" type="checkbox" className="Polaris-Checkbox__Input" aria-invalid="false" role="checkbox" aria-checked="true" value="" checked={limitCollectionState.IsCheckAllLimitCollection}
+                                                                                            /><span className="Polaris-Checkbox__Backdrop"></span>
+                                                                                            <span className="Polaris-Checkbox__Icon">
+                                                                                                <span className="Polaris-Icon">
+                                                                                                    <span className="Polaris-VisuallyHidden"></span>
+                                                                                                    <svg viewBox="0 0 20 20" className="Polaris-Icon__Svg" focusable="false" aria-hidden="true">
+                                                                                                        <path d="M14.723 6.237a.94.94 0 0 1 .053 1.277l-5.366 6.193a.834.834 0 0 1-.611.293.83.83 0 0 1-.622-.264l-2.927-3.097a.94.94 0 0 1 0-1.278.82.82 0 0 1 1.207 0l2.297 2.43 4.763-5.498a.821.821 0 0 1 1.206-.056Z"></path>
+                                                                                                    </svg>
+                                                                                                </span>
+                                                                                            </span>
+                                                                                        </span>
+                                                                                    </span>
+                                                                                </label>
+                                                                            </div>
+                                                                            <span className="Polaris-CheckableButton__Label">{limitCollectionState.Paginate.CurrentItems.filter(p => p.IsChecked).length} selected</span>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div className="Polaris-ButtonGroup__Item" onMouseEnter={() => { setIsHoverAction(true) }} onMouseLeave={() => { setIsHoverAction(false) }}>
+                                                                        <div>
+                                                                            <div>
+                                                                                <div className="Polaris-BulkActions__BulkActionButton">
+                                                                                    <button className="Polaris-Button" type="button" tabindex="0" aria-controls="Polarispopover17" aria-owns="Polarispopover17" aria-expanded="false">
+                                                                                        <span className="Polaris-Button__Content">
+                                                                                            <span className="Polaris-Button__Text">Actions</span>
+                                                                                            <span className="Polaris-Button__Icon">
+                                                                                                <div className="">
+                                                                                                    <span className="Polaris-Icon">
+                                                                                                        <span className="Polaris-VisuallyHidden"></span>
+                                                                                                        <svg viewBox="0 0 20 20" className="Polaris-Icon__Svg" focusable="false" aria-hidden="true">
+                                                                                                            <path d="M13.098 8h-6.196c-.751 0-1.172.754-.708 1.268l3.098 3.432c.36.399 1.055.399 1.416 0l3.098-3.433c.464-.513.043-1.267-.708-1.267Z"></path>
+                                                                                                        </svg>
+                                                                                                    </span>
+                                                                                                </div>
+                                                                                            </span>
+                                                                                        </span>
+                                                                                    </button>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
                                                         </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div id="PolarisPortalsContainer" style={{ display: isHoverAction ? 'block' : 'none' }}>
+                                            <div data-portal-id="popover-Polarisportal17" onMouseEnter={() => { setIsHoverAction(true) }} onMouseLeave={() => { setIsHoverAction(false) }}>
+                                                <div className="Polaris-PositionedOverlay Polaris-Popover__PopoverOverlay Polaris-Popover__PopoverOverlay--open" style={{ top: '42px', left: '122px' }}>
+                                                    <div className="Polaris-Popover" data-polaris-overlay="true">
+                                                        <div className="Polaris-Popover__FocusTracker" tabindex="0"></div>
+                                                        <div p-color-scheme="light">
+                                                            <div className="Polaris-Popover__Wrapper">
+                                                                <div id="Polarispopover17" tabindex="-1" className="Polaris-Popover__Content" style={{ minHeight: (45 * 3) + 'px' }}>
+                                                                    <div className="Polaris-Popover__Pane Polaris-Scrollable Polaris-Scrollable--vertical" data-polaris-scrollable="true">
+                                                                        <div className="Polaris-ActionList">
+                                                                            <div className="Polaris-ActionList__Section--withoutTitle">
+                                                                                <ul className="Polaris-ActionList__Actions" tabindex="-1">
+                                                                                    <li><button type="button" className="Polaris-ActionList__Item" onClick={() => {
+                                                                                        openDialogBulkAction(moreAppConfig.BulkAction.DeleteAllSelected);
 
-                                                    </>
+                                                                                    }}><span className="Polaris-ActionList__Content"><span className="Polaris-ActionList__Text"
+                                                                                    >Delete limit purchase</span></span></button></li>
+                                                                                    <li><button type="button" className="Polaris-ActionList__Item" onClick={() => {
+                                                                                        openDialogBulkAction(moreAppConfig.BulkAction.EnabledSelected);
+                                                                                    }}><span className="Polaris-ActionList__Content"><span className="Polaris-ActionList__Text">Enable all limit purchase</span></span></button></li>
+                                                                                    <li><button type="button" className="Polaris-ActionList__Item" onClick={() => {
+                                                                                        openDialogBulkAction(moreAppConfig.BulkAction.DisabledSelected);
+                                                                                    }}><span className="Polaris-ActionList__Content"><span className="Polaris-ActionList__Text">Disable all limit purchase</span></span></button></li>
+                                                                                </ul>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div className="Polaris-Popover__FocusTracker" tabindex="0"></div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </> : ''}
+
+                                <div className="Polaris-DataTable Polaris-DataTable--condensed">
+                                    <div className="Polaris-DataTable__ScrollContainer">
+                                        <table className="Polaris-DataTable__Table">
+                                            {
+                                                limitCollectionState.Paginate.CurrentItems.filter(p => p.IsChecked).length === 0 ? <>
+                                                    <thead>
+                                                        <tr>
+                                                            <th data-polaris-header-cell="true" className="Polaris-DataTable__Cell Polaris-DataTable__Cell--verticalAlignTop Polaris-DataTable__Cell--firstColumn Polaris-DataTable__Cell--header" scope="col">
+                                                                <Checkbox
+                                                                    checked={limitCollectionState.IsCheckAllLimitCollection}
+                                                                    onChange={(e) => {
+                                                                        ;
+                                                                        var result = limitCollectionState.Paginate.CurrentItems.map((p, i) => (true ? {
+                                                                            ...p,
+                                                                            IsChecked: e,
+                                                                        } : p))
+                                                                        dispatch(setListLimitCollection({
+                                                                            ...limitCollectionState,
+                                                                            Paginate: {
+                                                                                ...limitCollectionState.Paginate,
+                                                                                CurrentItems: result,
+                                                                            },
+                                                                            IsCheckAllLimitCollection: e
+                                                                        }))
+                                                                    }}
+                                                                />
+                                                            </th>
+                                                            <th data-polaris-header-cell="true" className="Polaris-DataTable__Cell Polaris-DataTable__Cell--verticalAlignTop Polaris-DataTable__Cell--header" scope="col">Collections</th>
+                                                            <th data-polaris-header-cell="true" className="Polaris-DataTable__Cell Polaris-DataTable__Cell--verticalAlignTop Polaris-DataTable__Cell--header" scope="col">Limit purchase</th>
+                                                            <th data-polaris-header-cell="true" className="Polaris-DataTable__Cell Polaris-DataTable__Cell--verticalAlignTop Polaris-DataTable__Cell--header" scope="col">Status</th>
+                                                            <th data-polaris-header-cell="true" className="Polaris-DataTable__Cell Polaris-DataTable__Cell--verticalAlignTop Polaris-DataTable__Cell--header" scope="col">Action</th>
+                                                        </tr>
+                                                    </thead>
+                                                </>
+                                                    : ''
                                             }
 
-                                        </>
+                                            <tbody>
+                                                {limitCollectionState.Paginate.CurrentItems != null && limitCollectionState.Paginate.CurrentItems.length > 0 ? limitCollectionState.Paginate.CurrentItems.map((limitcollection, index) => {
+                                                    return [
+                                                        <>
+                                                            <tr className="Polaris-DataTable__TableRow Polaris-DataTable--hoverable" style={{ background: limitcollection.IsChecked ? '#f2f7fe' : 'none' }}>
+                                                                <th className="Polaris-DataTable__Cell Polaris-DataTable__Cell--verticalAlignTop Polaris-DataTable__Cell--firstColumn" scope="row">
+                                                                    <Checkbox
+                                                                        checked={limitcollection.IsChecked}
+                                                                        onChange={(e) => {
+                                                                            ;
+                                                                            var result = limitCollectionState.Paginate.CurrentItems.map((p, i) => (p.CollectCode == limitcollection.CollectCode ? {
+                                                                                ...p,
+                                                                                IsChecked: e,
+                                                                            } : p));
+                                                                            var checkall = result.length === result.filter(p => p.IsChecked).length;
+                                                                            dispatch(setListLimitCollection({
+                                                                                ...limitCollectionState,
+                                                                                Paginate: {
+                                                                                    ...limitCollectionState.Paginate,
+                                                                                    CurrentItems: limitCollectionState.Paginate.CurrentItems.map((p, i) => (p.CollectCode == limitcollection.CollectCode ? {
+                                                                                        ...p,
+                                                                                        IsChecked: e,
+                                                                                    } : p)),
+                                                                                },
+                                                                                IsCheckAllLimitCollection: checkall
+                                                                            }))
+                                                                        }}
+                                                                    />
+                                                                </th>
+                                                                <td className="Polaris-DataTable__Cell Polaris-DataTable__Cell--verticalAlignTop">
+                                                                    <p key={index}>
+                                                                        {limitcollection.Title}
+                                                                        {/* <a href={'https://' + appState?.Shop?.Domain + '/products/' + limitcollection.Handle} target="_blank"></a> */}
+                                                                    </p>
+                                                                </td>
+                                                                <td className="Polaris-DataTable__Cell Polaris-DataTable__Cell--verticalAlignTop">
+                                                                    {
+                                                                       limitcollection.ID !== null && limitcollection.ID !== 0 &&   limitcollection.Min !== undefined && limitcollection.Min !== null && limitcollection.Max !== undefined && limitcollection.Max !== null ?
+                                                                            <List type="bullet">
+                                                                                <List.Item>Min: {limitcollection.Min} {limitcollection.LimitTypeMin === 0 ? 'items' : (limitCollectionState.Setting !== null && limitCollectionState.Setting !== undefined ? limitCollectionState.Setting.Currency : 'USD')}</List.Item>
+                                                                                <List.Item>Max: {limitcollection.Max === 0 ? 'Unlimited' : limitcollection.Max + ' ' + (limitcollection.LimitTypeMax === 0 ? 'items' : (limitCollectionState.Setting !== null && limitCollectionState.Setting !== undefined ? limitCollectionState.Setting.Currency : 'USD'))} </List.Item>
+                                                                                <>
+                                                                                    {
+                                                                                        limitcollection.ApplyLimitCustomerLifetime ? <List.Item>Limit to customer lifetime</List.Item> : ''
+                                                                                    }
 
-                                    ];
-                                }) : []}
-                            />
+                                                                                </>
+                                                                            </List> : null
+                                                                    }
+                                                                </td>
+                                                                <td className="Polaris-DataTable__Cell Polaris-DataTable__Cell--verticalAlignTop">
+                                                                    {
+                                                                        limitcollection.ID === null || limitcollection.ID === 0 ? <>
+                                                                            No Limit
+                                                                        </> :
+                                                                            <>
+                                                                                <label className="switch">
+                                                                                    <input type="checkbox" onClick={() => {
+                                                                                        UpdateEnabledStatus(limitcollection);
+
+                                                                                    }} className={limitcollection.IsEnabled ? 'active' : ''} id="togBtn" />
+                                                                                    <div className="slider round">
+                                                                                        <span className="on">ON</span>
+                                                                                        <span className="off">OFF</span>
+                                                                                    </div>
+                                                                                </label>
+
+                                                                            </>
+                                                                    }
+                                                                </td>
+                                                                <td className="Polaris-DataTable__Cell Polaris-DataTable__Cell--verticalAlignTop">
+                                                                    {
+                                                                        limitcollection.ID === null || limitcollection.ID === 0 ? <>
+                                                                            <Button
+                                                                                onClick={() => { setIsBulkUpdate(false); onClickCreateUpdateLimitCollection(limitcollection); }} accessibilityLabel="Add limit">Add limit</Button>
+                                                                        </> :
+                                                                            <>
+                                                                                <div className='group-button-merge'>
+                                                                                    <Button icon={EditMinor}
+                                                                                        onClick={() => { setIsBulkUpdate(false); onClickCreateUpdateLimitCollection(limitcollection); }} accessibilityLabel="Edit" />
+                                                                                    <Button icon={DeleteMinor}
+                                                                                        onClick={() => { setIsBulkUpdate(false); onClickDeleteLimitCollection(limitcollection) }} accessibilityLabel="Remove item" />
+                                                                                </div>
+
+                                                                            </>
+                                                                    }
+                                                                </td>
+                                                            </tr>
+                                                        </>
+                                                    ];
+                                                }) : []}
+
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+
+
                             {limitCollectionState.Paginate.CurrentItems !== undefined && limitCollectionState.Paginate.CurrentItems !== null && limitCollectionState.Paginate.CurrentItems.length > 0
                                 ? <>
 
@@ -603,6 +886,9 @@ const LimitCollection = () => {
                     <div className='create-update-limit-purchase'>
                         {
                             !IsBulkUpdate ? <>
+                                <div className=''>Collection original name: <strong>{createLimitCollectionState.limitcollection.Title}</strong></div>
+                                <div className='cb break-line-2'>
+                                </div>
                                 <div className='item w100'>
                                     <TextField
                                         value={createLimitCollectionState.limitcollection.CollectName}
@@ -619,8 +905,8 @@ const LimitCollection = () => {
                                         }}
                                         error={createLimitCollectionState.CollectNameValidation}
                                         type="text"
-                                        label="Collection name"
-                                        placeholder='Collection name'
+                                        label="Collection display name"
+                                        placeholder='Collection display name'
                                     />
                                 </div>
 
@@ -776,7 +1062,7 @@ const LimitCollection = () => {
                                     </Stack>
                                 </div>
                                 <div className="item">
-                                <span className='show-tooltip show-tooltip-2' onMouseEnter={()=>{setIsHover(true)}} onMouseLeave={()=>{setIsHover(false)}}>
+                                    <span className='show-tooltip show-tooltip-2' onMouseEnter={() => { setIsHover(true) }} onMouseLeave={() => { setIsHover(false) }}>
                                         <Icon source={QuestionMarkMajor} color='base' />
                                         <span className='tooltip2'>For example, if the max limit is 5, customer can only buy 5 products for one time. If they try to make the 2nd order with this product again, they will be failed.</span>
                                     </span>
@@ -788,6 +1074,34 @@ const LimitCollection = () => {
 
                     </div>
                 </Modal.Section>
+            </Modal>
+            <Modal
+                open={createLimitCollectionState.IsOpenBulkActionModal}
+                onClose={() => {
+                    dispatch(setCreateUpdateLimitCollection({
+                        ...createLimitCollectionState,
+                        IsOpenBulkActionModal: false
+                    }))
+                }}
+                title={"Do you want to " + BulkActionType + " limit purchase for " + limitCollectionState.Paginate.CurrentItems.filter(p => p.IsChecked).length + " selected collections?"}
+                primaryAction={{
+                    content: BulkActionType.charAt(0).toUpperCase() + BulkActionType.slice(1),
+                    loading: limitCollectionState.IsPaginateLoading,
+                    onAction: handleBulkAction,
+                }}
+                secondaryActions={[
+                    {
+                        content: 'Cancel',
+                        onAction: () => {
+                            dispatch(setCreateUpdateLimitCollection({
+                                ...createLimitCollectionState,
+                                IsOpenBulkActionModal: false
+                            }))
+                        },
+                    },
+                ]}
+            >
+
             </Modal>
             {Alert}
             {createLimitCollectionState.IsOpenSaveResult ? <Toast content={createLimitCollectionState.MessageSaveResult} duration={2400} onDismiss={() => {

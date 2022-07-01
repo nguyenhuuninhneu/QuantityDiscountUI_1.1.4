@@ -139,10 +139,48 @@ export const saveBulkLimitPurchase = () => {
 
   }
 }
+export const saveBulkActionPurchase = (type) => {
+  return (dispatch, getState) => {
+    dispatch(actions.setIsSaveLoading(true));
+    var listProduct = getState().limitpurchase.ListLimitPurchase.Paginate.CurrentItems.filter(p=>p.IsChecked).map(p=>p.ProductCode);
+    var bulkUpdate = getState().limitpurchase.CreateUpdateLimitPurchase.BulkUpdate;
+    if (bulkUpdate.Min === null) {
+      bulkUpdate.Min = 0;
+    }
+    if (bulkUpdate.Max === null) {
+      bulkUpdate.Max = 0;
+    }
+    if (bulkUpdate.ApplyLimitCustomerLifetime === null || bulkUpdate.ApplyLimitCustomerLifetime === undefined) {
+      bulkUpdate.ApplyLimitCustomerLifetime = false;
+    }
+    axios.post(config.rootLink + '/FrontEnd/BulkActionForLimitPurchase', {
+      listProduct: listProduct,
+      shop: config.shop,
+      BulkAction: type,
+      min: bulkUpdate.Min,
+      max: bulkUpdate.Max,
+      applyLimitCustomerLifetime: bulkUpdate.ApplyLimitCustomerLifetime,
+    })
+      .then(function (response) {
+        const result = response?.data;
+        if (result.IsSuccess) {
+          dispatch(actions.saveBulkActionPurchaseCompleted(result));
+        } else {
+          dispatch(actions.saveBulkActionPurchaseFailed(result));
+        }
 
+      })
+      .catch(function (error) {
+        const errorMsg = error.message;
+        dispatch(actions.saveBulkActionPurchaseFailed(errorMsg));
+      })
+
+  }
+}
 export default {
   fetchList,
   createEditLimitPurchase,
   saveLimitPurchase,
-  saveBulkLimitPurchase
+  saveBulkLimitPurchase,
+  saveBulkActionPurchase
 };

@@ -406,6 +406,17 @@
     width: 30%;
 }
 
+
+.w34pt {
+    width: 34%;
+}
+
+.w38pt {
+    width: 38%;
+}
+.w40pt {
+    width: 40%;
+}
 .w20pt {
     width: 20%;
 }
@@ -2116,4 +2127,34 @@ margin-left: -14px;
     position: absolute;
     top: 50%;
     left: 50%;
+}
+
+.collection-absolute{
+    position: absolute;
+    width: 600px;
+    height: 100%;
+    top: 50px;
+    left: 0;
+    z-index: 2;
+    box-shadow: var(0 0 0 1px rgba(63, 63, 68, 0.05), 0 0 0 1px rgba(63, 63, 68, 0.05), 0 1px 3px 0 rgba(63, 63, 68, 0.15));
+}
+.input-relative{
+    position: relative;
+}
+
+.list-collection{
+    max-height: 360px;
+}
+
+.collection-search-component .Polaris-Card{
+    border-radius: 0;
+}
+
+.collection-search-component .Polaris-Card__Section{
+    padding: 16px 16px;
+}
+
+.collection-search-component .Polaris-PageActions{
+    padding-bottom: 0 !important;
+    margin-top: 8px;
 }

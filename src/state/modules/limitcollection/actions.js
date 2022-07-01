@@ -100,3 +100,18 @@ export const setIsPaginateLoading = (data) => {
     payload: data,
   };
 };
+
+export const saveBulkActionCollectionCompleted = (data) => {
+  return {
+    type: types.SAVE_BULKACTIONCOLLECTIONCOMPLETED,
+    payload: data,
+  };
+};
+
+
+export const saveBulkActionCollectionFailed = (data) => {
+  return {
+    type: types.SAVE_BULKACTIONCOLLECTIONFAILED,
+    payload: data,
+  };
+};

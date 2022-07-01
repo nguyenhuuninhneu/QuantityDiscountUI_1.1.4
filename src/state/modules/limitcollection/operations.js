@@ -104,10 +104,36 @@ export const saveBulkLimitCollection = () => {
 
   }
 }
+export const saveBulkActionCollection = (type) => {
+  return (dispatch, getState) => {
+    dispatch(actions.setIsSaveLoading(true));
+    var listCollect = getState().limitcollection.ListLimitCollection.Paginate.CurrentItems.filter(p=>p.IsChecked).map(p=>p.CollectCode);
+    
+    axios.post(config.rootLink + '/FrontEnd/BulkActionForLimitCollection', {
+      listCollect: listCollect,
+      shop: config.shop,
+      BulkAction: type,
+    })
+      .then(function (response) {
+        const result = response?.data;
+        if (result.IsSuccess) {
+          dispatch(actions.saveBulkActionCollectionCompleted(result));
+        } else {
+          dispatch(actions.saveBulkActionCollectionFailed(result));
+        }
 
+      })
+      .catch(function (error) {
+        const errorMsg = error.message;
+        dispatch(actions.saveBulkActionCollectionFailed(errorMsg));
+      })
+
+  }
+}
 export default {
   fetchList,
   createEditLimitCollection,
   saveLimitCollection,
-  saveBulkLimitCollection
+  saveBulkLimitCollection,
+  saveBulkActionCollection
 };

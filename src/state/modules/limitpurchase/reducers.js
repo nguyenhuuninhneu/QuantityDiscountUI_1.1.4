@@ -6,6 +6,12 @@ const INITIAL_STATE = {
     TextSearchProduct: null,
     Collections: null,
     ListProductHaveLimit: [{ label: 'All products', value: 0 }, { label: 'Product have limit', value: 1 }],
+    ListCollection: [],
+    ListCollectionSelected: [],
+    TextSearchCollection: '',
+    ListLimitPurcharseSelected: [],
+    IsCheckAllLimitPurcharse: false,
+    IsOpenSearchCollection:false,
     ProductSelected: 0,
     IsLoadingPage: false,
     IsSaveLoading: false,
@@ -27,6 +33,8 @@ const INITIAL_STATE = {
       ApplyLimitCustomerLifetime: false
     },
     IsOpenCreateUpdateModal: false,
+    IsOpenSetLimitBulkActionModal: false,
+    IsOpenBulkActionModal: false,
     IsLoadingCreateUpdate: false,
     limitpurchase: {
       ID: 0,
@@ -281,6 +289,156 @@ const reducer = (state = INITIAL_STATE, action) => {
           MessageSaveResult: action.payload.Message,
         }
       };
+    case types.SAVE_BULKACTIONPURCHASECOMPLETED:
+      var listProductCodeAdd = action.payload.listProduct;
+      var CurrentItems = [];
+      var ListLimit = [];
+      switch (action.payload.BulkAction) {
+        case moreAppConfig.BulkAction.SetLimitPurchase:
+          CurrentItems = state.ListLimitPurchase.Paginate.CurrentItems.map((p, i) =>
+          (listProductCodeAdd.includes(p.ProductCode) ?
+            {
+              ...p,
+              ID: action.payload.listLimitPurchaseUpdate.filter(k => k.ProductID == p.ProductCode)[0]?.ID,
+              Min: action.payload.listLimitPurchaseUpdate.filter(k => k.ProductID == p.ProductCode)[0]?.Min,
+              Max: action.payload.listLimitPurchaseUpdate.filter(k => k.ProductID == p.ProductCode)[0]?.Max,
+              ApplyLimitCustomerLifetime: action.payload.listLimitPurchaseUpdate.filter(k => k.ProductID == p.ProductCode)[0]?.ApplyLimitCustomerLifetime,
+              IsLimitPurchaseWholeProduct: action.payload.listLimitPurchaseUpdate.filter(k => k.ProductID == p.ProductCode)[0]?.IsLimitPurchaseWholeProduct,
+              IsChecked: false,
+            }
+            : p)
+          );
+          ListLimit = state.ListLimitPurchase.limitpurchases.map((p, i) => (listProductCodeAdd.includes(p.ProductCode) ?
+            {
+              ...p,
+              ID: action.payload.listLimitPurchaseUpdate.filter(k => k.ProductID == p.ProductCode)[0]?.ID,
+              Min: action.payload.listLimitPurchaseUpdate.filter(k => k.ProductID == p.ProductCode)[0]?.Min,
+              Max: action.payload.listLimitPurchaseUpdate.filter(k => k.ProductID == p.ProductCode)[0]?.Max,
+              ApplyLimitCustomerLifetime: action.payload.listLimitPurchaseUpdate.filter(k => k.ProductID == p.ProductCode)[0]?.ApplyLimitCustomerLifetime,
+              IsLimitPurchaseWholeProduct: action.payload.listLimitPurchaseUpdate.filter(k => k.ProductID == p.ProductCode)[0]?.IsLimitPurchaseWholeProduct,
+              IsChecked: false,
+            }
+            : p));
+          break;
+        case moreAppConfig.BulkAction.DisabledSelected:
+          CurrentItems = state.ListLimitPurchase.Paginate.CurrentItems.map((p, i) =>
+          (listProductCodeAdd.includes(p.ProductCode) ?
+            {
+              ...p,
+              ID: action.payload.listLimitPurchaseUpdate.filter(k => k.ProductID == p.ProductCode)[0]?.ID,
+              IsEnabled: action.payload.listLimitPurchaseUpdate.filter(k => k.ProductID == p.ProductCode)[0]?.IsEnabled,
+              IsChecked: false,
+            }
+            : p)
+          );
+          ListLimit = state.ListLimitPurchase.limitpurchases.map((p, i) => (listProductCodeAdd.includes(p.ProductCode) ?
+            {
+              ...p,
+              ID: action.payload.listLimitPurchaseUpdate.filter(k => k.ProductID == p.ProductCode)[0]?.ID,
+              IsEnabled: action.payload.listLimitPurchaseUpdate.filter(k => k.ProductID == p.ProductCode)[0]?.IsEnabled,
+              IsChecked: false,
+            }
+            : p));
+          break;
+        case moreAppConfig.BulkAction.EnabledSelected:
+          CurrentItems = state.ListLimitPurchase.Paginate.CurrentItems.map((p, i) =>
+          (listProductCodeAdd.includes(p.ProductCode) ?
+            {
+              ...p,
+              ID: action.payload.listLimitPurchaseUpdate.filter(k => k.ProductID == p.ProductCode)[0]?.ID,
+              IsEnabled: action.payload.listLimitPurchaseUpdate.filter(k => k.ProductID == p.ProductCode)[0]?.IsEnabled,
+              IsChecked: false,
+            }
+            : p)
+          );
+          ListLimit = state.ListLimitPurchase.limitpurchases.map((p, i) => (listProductCodeAdd.includes(p.ProductCode) ?
+            {
+              ...p,
+              ID: action.payload.listLimitPurchaseUpdate.filter(k => k.ProductID == p.ProductCode)[0]?.ID,
+               IsEnabled: action.payload.listLimitPurchaseUpdate.filter(k => k.ProductID == p.ProductCode)[0]?.IsEnabled,
+               IsChecked: false,
+            }
+            : p));
+          break;
+        case moreAppConfig.BulkAction.DeleteAllSelected:
+          CurrentItems = state.ListLimitPurchase.Paginate.CurrentItems.map((p, i) =>
+          (listProductCodeAdd.includes(p.ProductCode) ?
+            {
+              ...p,
+              ID: null,
+              Min: null,
+              Max: null,
+              ApplyLimitCustomerLifetime: false,
+              IsLimitPurchaseWholeProduct: true,
+              IsLimitPurchaseVariant: false,
+              IsChecked: false,
+            }
+            : p)
+          );
+          ListLimit = state.ListLimitPurchase.limitpurchases.map((p, i) => (listProductCodeAdd.includes(p.ProductCode) ?
+            {
+              ...p,
+              ID: null,
+              Min: null,
+              Max: null,
+              ApplyLimitCustomerLifetime: false,
+              IsLimitPurchaseWholeProduct: true,
+              IsLimitPurchaseVariant: false,
+              IsChecked: false,
+            }
+            : p));
+          break;
+        default:
+          break;
+      }
+      return {
+        ...state,
+        ListLimitPurchase: {
+          ...state.ListLimitPurchase,
+          // ListProductHaveLimit: newArray,
+          IsLoadingPage: false,
+          IsSaveLoading: false,
+          IsCheckAllLimitPurcharse: false,
+          Paginate: {
+            ...state.ListLimitPurchase.Paginate,
+            CurrentItems: CurrentItems,
+          },
+          limitpurchases: ListLimit
+        },
+        CreateUpdateLimitPurchase: {
+          ...state.CreateUpdateLimitPurchase,
+          IsOpenSaveToolbar: !action.payload.IsSuccess,
+          IsOpenSaveResult: true,
+          IsOpenCreateUpdateModal: false,
+          IsOpenSetLimitBulkActionModal: false,
+          IsOpenBulkActionModal: false,
+          BulkUpdate: {
+            ListCollects: null,
+            Min: 0,
+            Max: 0,
+            ApplyLimitCustomerLifetime: false
+          },
+          MessageSaveResult: action.payload.IsSuccess ? 'Bulk action is saved successfully.' : action.payload.Message,
+        }
+      };
+    case types.SAVE_BULKACTIONPURCHASEFAILED:
+      return {
+        ...state,
+        ListLimitPurchase: {
+          ...state.ListLimitPurchase,
+          IsSaveLoading: false,
+        },
+        CreateUpdateLimitPurchase: {
+          ...state.CreateUpdateLimitPurchase,
+          IsOpenSaveToolbar: false,
+          IsLoadingPage: false,
+          IsOpenSaveResult: true,
+          IsOpenCreateUpdateModal: false,
+          MessageSaveResult: action.payload.Message,
+        }
+      };
+
+
     case types.SET_HAVELIMITPURCHASE:
       return {
         ...state,
@@ -310,7 +468,7 @@ const reducer = (state = INITIAL_STATE, action) => {
         }
 
       };
-      case types.SET_IS_DELETE_LOADING:
+    case types.SET_IS_DELETE_LOADING:
       return {
         ...state,
         ListLimitPurchase: {
@@ -318,7 +476,7 @@ const reducer = (state = INITIAL_STATE, action) => {
           IsDeleteLoading: action.payload,
         },
       };
-      case types.SET_IS_PAGINATE_LOADING:
+    case types.SET_IS_PAGINATE_LOADING:
       return {
         ...state,
         ListLimitPurchase: {
@@ -327,6 +485,7 @@ const reducer = (state = INITIAL_STATE, action) => {
         },
 
       };
+
     default:
       return state;
   }
