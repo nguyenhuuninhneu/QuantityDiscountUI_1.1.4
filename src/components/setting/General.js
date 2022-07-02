@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { PageActions, Card, Layout, Heading, TextStyle, Button, ButtonGroup, TextField, Toast, ContextualSaveBar, Spinner, Icon } from '@shopify/polaris';
 import { CircleInformationMajor } from '@shopify/polaris-icons';
 import Loading from '../../components/plugins/Loading';
+import FixTheConflict from './../campaign/Element/FixTheConflict';
 import { setSetting } from '../../state/modules/setting/actions';
 import { saveActive, loadProductByCampaign, synchronizeData, enableAppEmbed } from '../../state/modules/setting/operations';
 import Select from 'react-select';
@@ -10,7 +11,7 @@ import config from '../../config/config';
 import axios from 'axios';
 import AsyncSelect from 'react-select/async';
 import _ from "lodash";
-import {  withRouter } from "react-router-dom";
+import { withRouter } from "react-router-dom";
 
 function General() {
   const dispatch = useDispatch();
@@ -83,7 +84,7 @@ function General() {
         settingState.IsLoadingPage ? <Loading></Loading>
           :
           <>
-
+            <FixTheConflict IsShowButtonClose={false}/>
             <div className='section general'>
               <div className='activate'>
                 <div className="Polaris-Card" style={{ backgroundColor: '#EBF9FC', marginTop: '15px', marginBottom: '15px' }}>

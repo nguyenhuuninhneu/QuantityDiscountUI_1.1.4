@@ -96,6 +96,25 @@ function Plan() {
                                         </div>
                                         <div className='cb'></div>
                                     </div>
+                                    <div className='item'>
+                                        <div className='col col1'>
+                                        Discount for multiple
+                                        </div>
+                                        <div className='col col2'>
+                                            -
+                                        </div>
+                                        <div className='col col3'>
+                                            <Icon
+                                                source={CircleTickMajor}
+                                                color="base" />
+                                        </div>
+                                        <div className='col col4'>
+                                            <Icon
+                                                source={CircleTickMajor}
+                                                color="base" />
+                                        </div>
+                                        <div className='cb'></div>
+                                    </div>
                                     {/* <div className='item'>
                                         <div className='col col1'>
                                             Limit order

@@ -1464,6 +1464,28 @@ const CreateUpdateCampaign = (props) => {
                                                             <div className="campaign-detail" ref={myRefCampaignDetail}>
                                                                 <Heading size="small">3. Campaign Detail</Heading>
                                                                 <div className='timeline'>
+                                                                    <div className='item'>
+                                                                        <Stack>
+                                                                            <Checkbox
+                                                                                label="Set discount for multiple"
+                                                                                checked={campaign.SetDiscountForMultiple}
+                                                                                onChange={(e) => {
+                                                                                    dispatch(setCreateUpdateCampaign({
+                                                                                        ...campaignState,
+                                                                                        campaign: {
+                                                                                            ...campaign,
+                                                                                            SetDiscountForMultiple: e
+                                                                                        },
+                                                                                        IsOpenSaveToolbar: true
+                                                                                    }))
+                                                                                }}
+                                                                            />
+                                                                            <span className='show-tooltip show-tooltip-2'>
+                                                                                <Icon source={QuestionMarkMajor} color='base' />
+                                                                                <span className='tooltip2'>If multiple=3, customer can only receive discount when they buy 3,6,9,12,... products. If they buy 4, no discount will be applied</span>
+                                                                            </span>
+                                                                        </Stack>
+                                                                    </div>
                                                                     <Stack wrap={false} alignment="leading" spacing="loose">
                                                                         <Stack.Item fill>
                                                                             <FormLayout>

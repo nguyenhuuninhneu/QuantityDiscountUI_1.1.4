@@ -11,6 +11,7 @@ import moreAppConfig from '../../config/moreAppConfig';
 import '../../assets/css/paginate.css';
 import ReactPaginate from 'react-paginate';
 import Loading from '../../components/plugins/Loading';
+import FixTheConflict from './Element/FixTheConflict';
 import Select from 'react-select';
 import {
     Link,
@@ -227,6 +228,7 @@ const ListCampaign = (props) => {
             {campaignState.listLoading
                 ? <Loading></Loading>
                 : <>
+                    <FixTheConflict IsShowButtonClose={true} />
                     <div className='campaign-products'>
                         <div className='campaign-products-list'>
                             <div className=''>
@@ -376,6 +378,7 @@ const ListCampaign = (props) => {
 
                                                     }
                                                     {campaign.ListDetails != undefined && campaign.ListDetails != null && campaign.ListDetails.length > 2 ? <><p>...</p></> : ''}
+                                                    {campaign.SetDiscountForMultiple ? 'Multiple' + campaign.Multiple : ''}
                                                 </List>
                                                 ,
                                                 // <>

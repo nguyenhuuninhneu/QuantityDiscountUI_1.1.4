@@ -2158,3 +2158,14 @@ margin-left: -14px;
     padding-bottom: 0 !important;
     margin-top: 8px;
 }
+.fix-conflict .absolute{
+    position: relative;
+}
+.fix-conflict .absolute {
+    position: absolute;
+    right: 20px;
+    cursor: pointer !important;
+}
+.fix-conflict .Polaris-Button{
+    background-color:transparent;
+}
