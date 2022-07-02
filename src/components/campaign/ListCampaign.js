@@ -378,7 +378,7 @@ const ListCampaign = (props) => {
 
                                                     }
                                                     {campaign.ListDetails != undefined && campaign.ListDetails != null && campaign.ListDetails.length > 2 ? <><p>...</p></> : ''}
-                                                    {campaign.SetDiscountForMultiple ? 'Multiple' + campaign.Multiple : ''}
+                                                    {campaign.SetDiscountForMultiple ? <List.Item key={index}>{'Multiple: ' + campaign.Multiple}</List.Item> : ''}
                                                 </List>
                                                 ,
                                                 // <>
