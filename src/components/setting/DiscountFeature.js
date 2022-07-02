@@ -5,17 +5,18 @@ import { DeleteMinor, QuestionMarkMajor, CircleInformationMajor, CircleRightMajo
 import Loading from '../../components/plugins/Loading';
 import { setSetting } from '../../state/modules/setting/actions';
 import { saveSetting, fetchSetting, synchronizeDiscountFromShopify, getProcessDiscountCode } from '../../state/modules/setting/operations';
-import { setMenu } from '../../state/modules/app/actions';
+import { setMenu, setURL } from '../../state/modules/app/actions';
 import Select from 'react-select';
 import config from '../../config/config';
 import axios from 'axios';
 import moreAppConfig from '../../config/moreAppConfig';
 import ReactInterval from 'react-interval';
-import {  withRouter } from "react-router-dom";
+import { withRouter, useHistory } from "react-router-dom";
 
 
 function DiscountFeature() {
   const dispatch = useDispatch();
+  const history = useHistory();
   const appState = useSelector((state) => state.app);
   const settingState = useSelector((state) => state.setting.ListSetting);
 
@@ -131,70 +132,70 @@ function DiscountFeature() {
                             </Stack>
                             {
                               settingState.Setting.ShowDescription ? <>
-                              <div className="break-line"></div>
-                            <div className='element-general-child'>
-                              <p className='only-text'>For “Minimum cart quantity” condition</p>
-                              <TextField
-                                id='TextMinimumCartQuantity'
-                                placeholder='This discount is applied to the total quantity of products in your cart'
-                                value={settingState.Setting2.TextMinimumCartQuantity}
-                                onChange={(e) => {
-                                  dispatch(setSetting({
-                                    ...settingState,
-                                    Setting2: {
-                                      ...settingState.Setting2,
-                                      TextMinimumCartQuantity: e,
-                                    },
-                                    IsOpenSaveToolbar: true
-                                  }))
-                                }}
-                                type="text"
-                                multiline={2}
-                              />
-                            </div>
-                            <div className="break-line"></div>
-                            <div className='element-general-child'>
-                              <p className='only-text'>For “Minimum same product quantity” condition</p>
-                              <TextField
-                                id='TextMinimumSameProductQuantity'
-                                placeholder='This discount is applied to the total quantity of this product in your cart'
-                                value={settingState.Setting2.TextMinimumSameProductQuantity}
-                                onChange={(e) => {
-                                  dispatch(setSetting({
-                                    ...settingState,
-                                    Setting2: {
-                                      ...settingState.Setting2,
-                                      TextMinimumSameProductQuantity: e,
-                                    },
-                                    IsOpenSaveToolbar: true
-                                  }))
-                                }}
-                                type="text"
-                                multiline={2}
-                              />
-                            </div>
-                            <div className="break-line"></div>
+                                <div className="break-line"></div>
+                                <div className='element-general-child'>
+                                  <p className='only-text'>For “Minimum cart quantity” condition</p>
+                                  <TextField
+                                    id='TextMinimumCartQuantity'
+                                    placeholder='This discount is applied to the total quantity of products in your cart'
+                                    value={settingState.Setting2.TextMinimumCartQuantity}
+                                    onChange={(e) => {
+                                      dispatch(setSetting({
+                                        ...settingState,
+                                        Setting2: {
+                                          ...settingState.Setting2,
+                                          TextMinimumCartQuantity: e,
+                                        },
+                                        IsOpenSaveToolbar: true
+                                      }))
+                                    }}
+                                    type="text"
+                                    multiline={2}
+                                  />
+                                </div>
+                                <div className="break-line"></div>
+                                <div className='element-general-child'>
+                                  <p className='only-text'>For “Minimum same product quantity” condition</p>
+                                  <TextField
+                                    id='TextMinimumSameProductQuantity'
+                                    placeholder='This discount is applied to the total quantity of this product in your cart'
+                                    value={settingState.Setting2.TextMinimumSameProductQuantity}
+                                    onChange={(e) => {
+                                      dispatch(setSetting({
+                                        ...settingState,
+                                        Setting2: {
+                                          ...settingState.Setting2,
+                                          TextMinimumSameProductQuantity: e,
+                                        },
+                                        IsOpenSaveToolbar: true
+                                      }))
+                                    }}
+                                    type="text"
+                                    multiline={2}
+                                  />
+                                </div>
+                                <div className="break-line"></div>
 
-                            <div className='element-general-child'>
-                              <p className='only-text'>For “Minimum same product variant quantity” condition</p>
-                              <TextField
-                                id='TextMinimumSameProductVariantQuantity'
-                                placeholder='This discount is applied to the total quantity of the same variant of this product in your cart'
-                                value={settingState.Setting2.TextMinimumSameProductVariantQuantity}
-                                onChange={(e) => {
-                                  dispatch(setSetting({
-                                    ...settingState,
-                                    Setting2: {
-                                      ...settingState.Setting2,
-                                      TextMinimumSameProductVariantQuantity: e,
-                                    },
-                                    IsOpenSaveToolbar: true
-                                  }))
-                                }}
-                                type="text"
-                                multiline={2}
-                              />
-                            </div>
+                                <div className='element-general-child'>
+                                  <p className='only-text'>For “Minimum same product variant quantity” condition</p>
+                                  <TextField
+                                    id='TextMinimumSameProductVariantQuantity'
+                                    placeholder='This discount is applied to the total quantity of the same variant of this product in your cart'
+                                    value={settingState.Setting2.TextMinimumSameProductVariantQuantity}
+                                    onChange={(e) => {
+                                      dispatch(setSetting({
+                                        ...settingState,
+                                        Setting2: {
+                                          ...settingState.Setting2,
+                                          TextMinimumSameProductVariantQuantity: e,
+                                        },
+                                        IsOpenSaveToolbar: true
+                                      }))
+                                    }}
+                                    type="text"
+                                    multiline={2}
+                                  />
+                                </div>
                               </> : <></>
                             }
 
@@ -408,7 +409,7 @@ function DiscountFeature() {
                                           </div>
                                         </div>
                                       </div>
-                                      
+
                                     </Button>
                                   </div>
                                   <div className={settingState.Setting2.CardTheme == 1 ? 'item-card-theme active' : 'item-card-theme'}>
@@ -1332,162 +1333,162 @@ function DiscountFeature() {
                                   </div>
                                   <div className="break-line"></div>
                                   <p className='only-text'>Discount code prefix</p>
-                              <TextField
-                                id='DisCountCodePrefix'
-                                placeholder=''
-                                disabled={!settingState.Setting.UseDiscountCodeOnCart}
-                                value={settingState.Setting.DisCountCodePrefix}
-                                onChange={(e) => {
-                                  dispatch(setSetting({
-                                    ...settingState,
-                                    Setting: {
-                                      ...settingState.Setting,
-                                      DisCountCodePrefix: e,
-                                    },
-                                    IsOpenSaveToolbar: true
-                                  }))
-                                }}
-                                type="text"
-                              />
-                              <div className="break-line"></div>
+                                  <TextField
+                                    id='DisCountCodePrefix'
+                                    placeholder=''
+                                    disabled={!settingState.Setting.UseDiscountCodeOnCart}
+                                    value={settingState.Setting.DisCountCodePrefix}
+                                    onChange={(e) => {
+                                      dispatch(setSetting({
+                                        ...settingState,
+                                        Setting: {
+                                          ...settingState.Setting,
+                                          DisCountCodePrefix: e,
+                                        },
+                                        IsOpenSaveToolbar: true
+                                      }))
+                                    }}
+                                    type="text"
+                                  />
+                                  <div className="break-line"></div>
 
-                              <p className='only-text'>Customize text</p>
+                                  <p className='only-text'>Customize text</p>
 
-                              <div className='group-fill-text'>
+                                  <div className='group-fill-text'>
 
-                                <div className='item'>
-                                  <div className='col col1'>
-                                    “Apply”
-                                  </div>
-                                  <div className='col col2'>
-                                    <Icon
-                                      source={CircleRightMajor}
-                                      color="base" />
-                                  </div>
-                                  <div className='col col3'>
-                                    <TextField
-                                      id='TextApply'
-                                      placeholder='Apply'
-                                      disabled={!settingState.Setting.UseDiscountCodeOnCart}
-                                      value={settingState.Setting2.TextApply}
-                                      onChange={(e) => {
-                                        dispatch(setSetting({
-                                          ...settingState,
-                                          Setting2: {
-                                            ...settingState.Setting2,
-                                            TextApply: e,
-                                          },
-                                          IsOpenSaveToolbar: true
-                                        }))
-                                      }}
-                                      type="text"
-                                    />
-                                  </div>
-                                  <div className='cb'>
-                                  </div>
-                                </div>
+                                    <div className='item'>
+                                      <div className='col col1'>
+                                        “Apply”
+                                      </div>
+                                      <div className='col col2'>
+                                        <Icon
+                                          source={CircleRightMajor}
+                                          color="base" />
+                                      </div>
+                                      <div className='col col3'>
+                                        <TextField
+                                          id='TextApply'
+                                          placeholder='Apply'
+                                          disabled={!settingState.Setting.UseDiscountCodeOnCart}
+                                          value={settingState.Setting2.TextApply}
+                                          onChange={(e) => {
+                                            dispatch(setSetting({
+                                              ...settingState,
+                                              Setting2: {
+                                                ...settingState.Setting2,
+                                                TextApply: e,
+                                              },
+                                              IsOpenSaveToolbar: true
+                                            }))
+                                          }}
+                                          type="text"
+                                        />
+                                      </div>
+                                      <div className='cb'>
+                                      </div>
+                                    </div>
 
-                                <div className='item'>
-                                  <div className='col col1'>
-                                    “Base on”
-                                  </div>
-                                  <div className='col col2'>
-                                    <Icon
-                                      source={CircleRightMajor}
-                                      color="base" />
-                                  </div>
-                                  <div className='col col3'>
-                                    <TextField
-                                      id='TextBaseOn'
-                                      placeholder='Base on'
-                                      disabled={!settingState.Setting.UseDiscountCodeOnCart}
-                                      value={settingState.Setting2.TextBaseOn}
-                                      onChange={(e) => {
-                                        dispatch(setSetting({
-                                          ...settingState,
-                                          Setting2: {
-                                            ...settingState.Setting2,
-                                            TextBaseOn: e,
-                                          },
-                                          IsOpenSaveToolbar: true
-                                        }))
-                                      }}
-                                      type="text"
-                                    />
-                                  </div>
-                                  <div className='cb'>
-                                  </div>
-                                </div>
+                                    <div className='item'>
+                                      <div className='col col1'>
+                                        “Base on”
+                                      </div>
+                                      <div className='col col2'>
+                                        <Icon
+                                          source={CircleRightMajor}
+                                          color="base" />
+                                      </div>
+                                      <div className='col col3'>
+                                        <TextField
+                                          id='TextBaseOn'
+                                          placeholder='Base on'
+                                          disabled={!settingState.Setting.UseDiscountCodeOnCart}
+                                          value={settingState.Setting2.TextBaseOn}
+                                          onChange={(e) => {
+                                            dispatch(setSetting({
+                                              ...settingState,
+                                              Setting2: {
+                                                ...settingState.Setting2,
+                                                TextBaseOn: e,
+                                              },
+                                              IsOpenSaveToolbar: true
+                                            }))
+                                          }}
+                                          type="text"
+                                        />
+                                      </div>
+                                      <div className='cb'>
+                                      </div>
+                                    </div>
 
-                                <div className='item'>
-                                  <div className='col col1'>
-                                    “Discount code”
-                                  </div>
-                                  <div className='col col2'>
-                                    <Icon
-                                      source={CircleRightMajor}
-                                      color="base" />
-                                  </div>
-                                  <div className='col col3'>
-                                    <TextField
-                                      id='TextDiscountCode'
-                                      placeholder='Discount code'
-                                      disabled={!settingState.Setting.UseDiscountCodeOnCart}
-                                      value={settingState.Setting2.TextDiscountCode}
-                                      onChange={(e) => {
-                                        dispatch(setSetting({
-                                          ...settingState,
-                                          Setting2: {
-                                            ...settingState.Setting2,
-                                            TextDiscountCode: e,
-                                          },
-                                          IsOpenSaveToolbar: true
-                                        }))
-                                      }}
-                                      type="text"
-                                    />
-                                  </div>
-                                  <div className='cb'>
-                                  </div>
-                                </div>
+                                    <div className='item'>
+                                      <div className='col col1'>
+                                        “Discount code”
+                                      </div>
+                                      <div className='col col2'>
+                                        <Icon
+                                          source={CircleRightMajor}
+                                          color="base" />
+                                      </div>
+                                      <div className='col col3'>
+                                        <TextField
+                                          id='TextDiscountCode'
+                                          placeholder='Discount code'
+                                          disabled={!settingState.Setting.UseDiscountCodeOnCart}
+                                          value={settingState.Setting2.TextDiscountCode}
+                                          onChange={(e) => {
+                                            dispatch(setSetting({
+                                              ...settingState,
+                                              Setting2: {
+                                                ...settingState.Setting2,
+                                                TextDiscountCode: e,
+                                              },
+                                              IsOpenSaveToolbar: true
+                                            }))
+                                          }}
+                                          type="text"
+                                        />
+                                      </div>
+                                      <div className='cb'>
+                                      </div>
+                                    </div>
 
-                                <div className='item'>
-                                  <div className='col col1'>
-                                    “Discount code isn’t available”
+                                    <div className='item'>
+                                      <div className='col col1'>
+                                        “Discount code isn’t available”
+                                      </div>
+                                      <div className='col col2'>
+                                        <Icon
+                                          source={CircleRightMajor}
+                                          color="base" />
+                                      </div>
+                                      <div className='col col3'>
+                                        <TextField
+                                          id='TextDiscountCodeNotAvailable'
+                                          placeholder='Discount code isn’t available'
+                                          disabled={!settingState.Setting.UseDiscountCodeOnCart}
+                                          value={settingState.Setting2.TextDiscountCodeNotAvailable}
+                                          onChange={(e) => {
+                                            dispatch(setSetting({
+                                              ...settingState,
+                                              Setting2: {
+                                                ...settingState.Setting2,
+                                                TextDiscountCodeNotAvailable: e,
+                                              },
+                                              IsOpenSaveToolbar: true
+                                            }))
+                                          }}
+                                          type="text"
+                                        />
+                                      </div>
+                                      <div className='cb'>
+                                      </div>
+                                    </div>
+                                    <div className="break-line"></div>
                                   </div>
-                                  <div className='col col2'>
-                                    <Icon
-                                      source={CircleRightMajor}
-                                      color="base" />
-                                  </div>
-                                  <div className='col col3'>
-                                    <TextField
-                                      id='TextDiscountCodeNotAvailable'
-                                      placeholder='Discount code isn’t available'
-                                      disabled={!settingState.Setting.UseDiscountCodeOnCart}
-                                      value={settingState.Setting2.TextDiscountCodeNotAvailable}
-                                      onChange={(e) => {
-                                        dispatch(setSetting({
-                                          ...settingState,
-                                          Setting2: {
-                                            ...settingState.Setting2,
-                                            TextDiscountCodeNotAvailable: e,
-                                          },
-                                          IsOpenSaveToolbar: true
-                                        }))
-                                      }}
-                                      type="text"
-                                    />
-                                  </div>
-                                  <div className='cb'>
-                                  </div>
-                                </div>
-                                <div className="break-line"></div>
-                              </div>
                                 </> : <></>
                               }
 
-                              
+
                             </div>
 
                             <Stack>
@@ -1649,9 +1650,9 @@ function DiscountFeature() {
                                             settingState.Setting.ShowDiscountedPrice ? <>
                                               <tr className="Polaris-DataTable__TableRow Polaris-DataTable--hoverable">
                                                 <th style={{ fontSize: settingState.Setting.TableFontSizeHeading + 'px', color: settingState.Setting2.TextColorHeading, backgroundColor: settingState.Setting2.BackgroundColorHeading }} data-polaris-header-cell="true" className="Polaris-DataTable__Cell Polaris-DataTable__Cell--verticalAlignTop Polaris-DataTable__Cell--firstColumn Polaris-DataTable__Cell--header Polaris-DataTable__Cell--header-border-none" scope="col">{settingState.Setting.TextDiscountPrice}</th>
-                                                <td className="Polaris-DataTable__Cell Polaris-DataTable__Cell--verticalAlignTop" style={{ fontSize: settingState.Setting2.FontSizeItemInTable + 'px', color: settingState.Setting2.TextColorItemInTable, backgroundColor: settingState.Setting2.BackgroundColorItemInTable }}>{rowsPreview[0][2]+ ' ' + settingState.Setting.Currency}</td>
-                                                <td className="Polaris-DataTable__Cell Polaris-DataTable__Cell--verticalAlignTop" style={{ fontSize: settingState.Setting2.FontSizeItemInTable + 'px', color: settingState.Setting2.TextColorItemInTable, backgroundColor: settingState.Setting2.BackgroundColorItemInTable }}>{rowsPreview[1][2]+ ' ' + settingState.Setting.Currency}</td>
-                                                <td className="Polaris-DataTable__Cell Polaris-DataTable__Cell--verticalAlignTop" style={{ fontSize: settingState.Setting2.FontSizeItemInTable + 'px', color: settingState.Setting2.TextColorItemInTable, backgroundColor: settingState.Setting2.BackgroundColorItemInTable }}>{rowsPreview[2][2]+ ' ' + settingState.Setting.Currency}</td>
+                                                <td className="Polaris-DataTable__Cell Polaris-DataTable__Cell--verticalAlignTop" style={{ fontSize: settingState.Setting2.FontSizeItemInTable + 'px', color: settingState.Setting2.TextColorItemInTable, backgroundColor: settingState.Setting2.BackgroundColorItemInTable }}>{rowsPreview[0][2] + ' ' + settingState.Setting.Currency}</td>
+                                                <td className="Polaris-DataTable__Cell Polaris-DataTable__Cell--verticalAlignTop" style={{ fontSize: settingState.Setting2.FontSizeItemInTable + 'px', color: settingState.Setting2.TextColorItemInTable, backgroundColor: settingState.Setting2.BackgroundColorItemInTable }}>{rowsPreview[1][2] + ' ' + settingState.Setting.Currency}</td>
+                                                <td className="Polaris-DataTable__Cell Polaris-DataTable__Cell--verticalAlignTop" style={{ fontSize: settingState.Setting2.FontSizeItemInTable + 'px', color: settingState.Setting2.TextColorItemInTable, backgroundColor: settingState.Setting2.BackgroundColorItemInTable }}>{rowsPreview[2][2] + ' ' + settingState.Setting.Currency}</td>
                                               </tr>
 
                                             </> : <></>
@@ -1676,7 +1677,7 @@ function DiscountFeature() {
 
                           settingState.Setting.LayoutInProductPage == 3 ? <>
                             <div className="Polaris-CalloutCard__Buttons" style={{ display: 'flex', marginTop: 0 }}>
-                              
+
                               <div className={rowsCardPreview.length > 2 ? "list-card-scroll" : 'list-card'}>
                                 {
                                   rowsCardPreview.map((item, index) => {
@@ -1834,7 +1835,7 @@ function DiscountFeature() {
                             : <></>
                         }
                         {settingState.Setting.LayoutInProductPage == 3 && settingState.Setting2.ShowDiscountedPriceEachCard ? <>
-                          <p style={{ marginTop: '10px' }}>{(settingState.Setting2.TextDiscountedPriceEachCard == null ? '' : settingState.Setting2.TextDiscountedPriceEachCard).replace('{total_amount}', (rowsCardPreview[0][0] * (100-rowsCardPreview[0][1]))+ ' ' + settingState.Setting.Currency).replace('{price_per_item}', (100 - rowsCardPreview[0][1]) + ' ' + settingState.Setting.Currency)}</p>
+                          <p style={{ marginTop: '10px' }}>{(settingState.Setting2.TextDiscountedPriceEachCard == null ? '' : settingState.Setting2.TextDiscountedPriceEachCard).replace('{total_amount}', (rowsCardPreview[0][0] * (100 - rowsCardPreview[0][1])) + ' ' + settingState.Setting.Currency).replace('{price_per_item}', (100 - rowsCardPreview[0][1]) + ' ' + settingState.Setting.Currency)}</p>
 
                         </> : <></>}
                         {settingState.Setting.ShowDescription ? <>
@@ -1987,6 +1988,8 @@ function DiscountFeature() {
           onAction: () => {
             setIsShowPopupUpgrade(false)
             dispatch(setMenu(moreAppConfig.Menu.PLAN))
+            history.push('/plan?shop=' + config.shop + '&token=' + config.token);
+            dispatch(setURL('plan'));
           },
         }}
         secondaryActions={[

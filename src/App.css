@@ -668,7 +668,7 @@ input.active+.slider .off {
     padding-left: 15px;
 }
 
-.timeline .node {
+.timeline .node, .timeline .node-multiple {
     margin-top: 10px;
     position: relative;
 }
@@ -2009,6 +2009,22 @@ border-radius: 4px;
     margin-left: -6px;
 }
 
+.show-tooltip:hover .tooltip2.right {
+    cursor: pointer !important;
+    z-index: 100;
+    display: inline-block;
+    visibility: visible;
+    position: absolute;
+    top: -25px;
+    left: 34px;
+    background: #5C5F62;
+    color: #fff;
+    font-size: 14px;
+    width: 320px;
+    padding: 2px 6px;
+    border-radius: 4px;
+    margin-left: -6px;
+}
 .create-update-limit-purchase .show-tooltip .Polaris-Icon{
 display: inline-block;
 margin-left: -14px;

@@ -1,31 +1,31 @@
 const utils = {
-    ShopifyMoney : (cents, format) => {
+    ShopifyMoney: (cents, format) => {
         // if (typeof cents === 'string') {
         //     cents = cents.replace('.', '');
         // }
         // var value = '';
         // var placeholderRegex = /\{\{\s*(\w+)\s*\}\}/;
         // var formatString = (format || this.money_format);
-    
+
         // function defaultOption(opt, def) {
         //     return (typeof opt == 'undefined' ? def : opt);
         // }
-    
+
         // function formatWithDelimiters(number, precision, thousands, decimal) {
         //     precision = defaultOption(precision, 2);
         //     thousands = defaultOption(thousands, ',');
         //     decimal = defaultOption(decimal, '.');
-    
+
         //     if (isNaN(number) || number == null) {
         //         return 0;
         //     }
-    
+
         //     number = (number / 100.0).toFixed(precision);
-    
+
         //     var parts = number.split('.'),
         //         dollars = parts[0].replace(/(\d)(?=(\d\d\d)+(?!\d))/g, '$1' + thousands),
         //         cents = parts[1] ? (decimal + parts[1]) : '';
-    
+
         //     return dollars + cents;
         // }
         // switch (formatString.match(placeholderRegex)[1]) {
@@ -44,6 +44,19 @@ const utils = {
         // }
         // return formatString.replace(placeholderRegex, value);
         return cents / 100;
+    },
+    MakeDynamicMultiple: (quantity, multiple) => {
+        if(quantity ===null || quantity === undefined) {
+            quantity = 0;
+        }
+        if(multiple ===null || multiple === undefined) {
+            multiple = 1;
+        }
+        quantity = parseInt(quantity,0);
+        multiple = parseInt(multiple,0);
+        let result = '';
+        result = quantity + ', ' + (quantity + multiple) + ', ' + (quantity + (2 * multiple)) + ', ' + (quantity + (3 * multiple)) +',...';
+        return result;
     }
 }
 

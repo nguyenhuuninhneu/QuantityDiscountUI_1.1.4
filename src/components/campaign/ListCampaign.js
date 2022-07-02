@@ -519,8 +519,8 @@ const ListCampaign = (props) => {
                     onAction: () => {
                         setIsShowPopupUpgradeCreateCampaign(false)
                         dispatch(setMenu(moreAppConfig.Menu.PLAN))
-                        // history.push('/plan?shop=' + config.shop + '&token=' + config.token);
-                        // dispatch(setURL('plan'));
+                        history.push('/plan?shop=' + config.shop + '&token=' + config.token);
+                        dispatch(setURL('plan'));
                     },
                 }}
                 secondaryActions={[

@@ -24,6 +24,7 @@ import { withRouter, useHistory, useParams } from "react-router-dom";
 import AsyncSelect from 'react-select/async';
 
 import _ from "lodash";
+import utils from '../../config/utils';
 
 const dateObj = new Date();
 const month = String(dateObj.getMonth() + 1).padStart(2, '0');
@@ -49,6 +50,7 @@ const CreateUpdateCampaign = (props) => {
     const scrollToCampaignDetail = () => myRefCampaignDetail.current.scrollIntoView();
     const scrollToDate = () => myRefDate.current.scrollIntoView();
     const scrollToTagCustomer = () => myRefTagCustomer.current.scrollIntoView();
+    const [isShowPopupUpgrade, setIsShowPopupUpgrade] = useState(false);
 
     const wait = 100;
     const loadOptionsProduct = inputValue2 => getAsyncOptionsProduct(inputValue2);
@@ -440,7 +442,6 @@ const CreateUpdateCampaign = (props) => {
         return true;
     }
     function ValidForm() {
-
         if (campaign.Title.toString() == '' || campaign.Title.toString() === null) {
             scrollToDiscountTitle();
             dispatch(setCreateUpdateCampaign({
@@ -566,58 +567,143 @@ const CreateUpdateCampaign = (props) => {
 
         }
         if (campaign.ListDetails != undefined && campaign.ListDetails.length > 0) {
-            var checkQuantityNull = campaign.ListDetails.filter(p => p.Quantity === '').length > 0 ? false : true;
-            if (!checkQuantityNull) {
-                dispatch(setCreateUpdateCampaign({
-                    ...campaignState,
-                    IsOpenSaveToolbar: false,
-                    CampaignDetailValidation: "Minimum quantity is required"
-                }))
-                scrollToCampaignDetail();
-                return false;
+            if (campaign.SetDiscountForMultiple) {
+                //SetDiscountForMultiple = true
+                var checkQuantityNull = campaign.ListDetails[0].Quantity === '' ? false : true;
+                if (!checkQuantityNull) {
+                    dispatch(setCreateUpdateCampaign({
+                        ...campaignState,
+                        IsOpenSaveToolbar: false,
+                        CampaignDetailValidation: "Minimum quantity is required"
+                    }))
+                    scrollToCampaignDetail();
+                    return false;
+                }
+                var checkQuantityZero = parseInt(campaign.ListDetails[0].Quantity) === 0 ? false : true;
+                if (!checkQuantityZero) {
+                    dispatch(setCreateUpdateCampaign({
+                        ...campaignState,
+                        IsOpenSaveToolbar: false,
+                        CampaignDetailValidation: "Minimum quantity must be greater than 0"
+                    }))
+                    scrollToCampaignDetail();
+                    return false;
+                }
+                if (checkQuantityZero && checkQuantityNull) {
+                    dispatch(setCreateUpdateCampaign({
+                        ...campaignState,
+                        CampaignDetailValidation: ""
+                    }))
+                }
+                var checkPriceNull = campaign.ListDetails[0].PercentOrPrice === '' ? false : true;
+                if (!checkPriceNull) {
+                    dispatch(setCreateUpdateCampaign({
+                        ...campaignState,
+                        IsOpenSaveToolbar: false,
+                        CampaignDetailValidation: "Discount value is required"
+                    }))
+                    scrollToCampaignDetail();
+                    return false;
+                }
+                var checkPriceZero = parseFloat(campaign.ListDetails[0].PercentOrPrice) === 0 ? false : true;
+                if (!checkPriceZero) {
+                    dispatch(setCreateUpdateCampaign({
+                        ...campaignState,
+                        IsOpenSaveToolbar: false,
+                        CampaignDetailValidation: "Discount value must be greater than 0"
+                    }))
+                    scrollToCampaignDetail();
+                    return false;
+                }
+                if (checkPriceZero && checkPriceNull) {
+                    dispatch(setCreateUpdateCampaign({
+                        ...campaignState,
+                        CampaignDetailValidation: ""
+                    }))
+                }
+                var checkMultipleNull = campaign.Multiple === '' ? false : true;
+                if (!checkMultipleNull) {
+                    dispatch(setCreateUpdateCampaign({
+                        ...campaignState,
+                        IsOpenSaveToolbar: false,
+                        CampaignDetailValidation: "Multiple value is required"
+                    }))
+                    scrollToCampaignDetail();
+                    return false;
+                }
+                var checkMultipleZero = parseInt(campaign.Multiple) === 0 ? false : true;
+                if (!checkMultipleZero) {
+                    dispatch(setCreateUpdateCampaign({
+                        ...campaignState,
+                        IsOpenSaveToolbar: false,
+                        CampaignDetailValidation: "Multiple value must be greater than 0"
+                    }))
+                    scrollToCampaignDetail();
+                    return false;
+                }
+                if (checkMultipleZero && checkMultipleNull) {
+                    dispatch(setCreateUpdateCampaign({
+                        ...campaignState,
+                        CampaignDetailValidation: ""
+                    }))
+                }
             }
-            var checkQuantityZero = campaign.ListDetails.filter(p => parseInt(p.Quantity) === 0).length > 0 ? false : true;
-            if (!checkQuantityZero) {
-                dispatch(setCreateUpdateCampaign({
-                    ...campaignState,
-                    IsOpenSaveToolbar: false,
-                    CampaignDetailValidation: "Minimum quantity must be greater than 0"
-                }))
-                scrollToCampaignDetail();
-                return false;
+            else {
+                //SetDiscountForMultiple = false
+                var checkQuantityNull = campaign.ListDetails.filter(p => p.Quantity === '').length > 0 ? false : true;
+                if (!checkQuantityNull) {
+                    dispatch(setCreateUpdateCampaign({
+                        ...campaignState,
+                        IsOpenSaveToolbar: false,
+                        CampaignDetailValidation: "Minimum quantity is required"
+                    }))
+                    scrollToCampaignDetail();
+                    return false;
+                }
+                var checkQuantityZero = campaign.ListDetails.filter(p => parseInt(p.Quantity) === 0).length > 0 ? false : true;
+                if (!checkQuantityZero) {
+                    dispatch(setCreateUpdateCampaign({
+                        ...campaignState,
+                        IsOpenSaveToolbar: false,
+                        CampaignDetailValidation: "Minimum quantity must be greater than 0"
+                    }))
+                    scrollToCampaignDetail();
+                    return false;
+                }
+                if (checkQuantityZero && checkQuantityNull) {
+                    dispatch(setCreateUpdateCampaign({
+                        ...campaignState,
+                        CampaignDetailValidation: ""
+                    }))
+                }
+                var checkPriceNull = campaign.ListDetails.filter(p => p.PercentOrPrice === '').length > 0 ? false : true;
+                if (!checkPriceNull) {
+                    dispatch(setCreateUpdateCampaign({
+                        ...campaignState,
+                        IsOpenSaveToolbar: false,
+                        CampaignDetailValidation: "Discount value is required"
+                    }))
+                    scrollToCampaignDetail();
+                    return false;
+                }
+                var checkPriceZero = campaign.ListDetails.filter(p => parseFloat(p.PercentOrPrice) === 0).length > 0 ? false : true;
+                if (!checkPriceZero) {
+                    dispatch(setCreateUpdateCampaign({
+                        ...campaignState,
+                        IsOpenSaveToolbar: false,
+                        CampaignDetailValidation: "Discount value must be greater than 0"
+                    }))
+                    scrollToCampaignDetail();
+                    return false;
+                }
+                if (checkPriceZero && checkPriceNull) {
+                    dispatch(setCreateUpdateCampaign({
+                        ...campaignState,
+                        CampaignDetailValidation: ""
+                    }))
+                }
             }
-            if (checkQuantityZero && checkQuantityNull) {
-                dispatch(setCreateUpdateCampaign({
-                    ...campaignState,
-                    CampaignDetailValidation: ""
-                }))
-            }
-            var checkPriceNull = campaign.ListDetails.filter(p => p.PercentOrPrice === '').length > 0 ? false : true;
-            if (!checkPriceNull) {
-                dispatch(setCreateUpdateCampaign({
-                    ...campaignState,
-                    IsOpenSaveToolbar: false,
-                    CampaignDetailValidation: "Discount value is required"
-                }))
-                scrollToCampaignDetail();
-                return false;
-            }
-            var checkPriceZero = campaign.ListDetails.filter(p => parseFloat(p.PercentOrPrice) === 0).length > 0 ? false : true;
-            if (!checkPriceZero) {
-                dispatch(setCreateUpdateCampaign({
-                    ...campaignState,
-                    IsOpenSaveToolbar: false,
-                    CampaignDetailValidation: "Discount value must be greater than 0"
-                }))
-                scrollToCampaignDetail();
-                return false;
-            }
-            if (checkPriceZero && checkPriceNull) {
-                dispatch(setCreateUpdateCampaign({
-                    ...campaignState,
-                    CampaignDetailValidation: ""
-                }))
-            }
+
         }
         else {
             dispatch(setCreateUpdateCampaign({
@@ -1467,112 +1553,248 @@ const CreateUpdateCampaign = (props) => {
                                                                     <div className='item'>
                                                                         <Stack>
                                                                             <Checkbox
-                                                                                label="Set discount for multiple"
+                                                                                label="Set discount for multiples"
                                                                                 checked={campaign.SetDiscountForMultiple}
                                                                                 onChange={(e) => {
-                                                                                    dispatch(setCreateUpdateCampaign({
-                                                                                        ...campaignState,
-                                                                                        campaign: {
-                                                                                            ...campaign,
-                                                                                            SetDiscountForMultiple: e
-                                                                                        },
-                                                                                        IsOpenSaveToolbar: true
-                                                                                    }))
+                                                                                    if (campaignState.Setting.PlanNumber === moreAppConfig.PlanNumber.Free) {
+                                                                                        setIsShowPopupUpgrade(true);
+                                                                                    } else {
+                                                                                        var newarrPreview = [];
+                                                                                        if (e) {
+                                                                                            var obj = campaign.ListDetails[0];
+                                                                                            newarrPreview.push(obj);
+                                                                                        } else {
+                                                                                            newarrPreview = campaign.ListDetails;
+                                                                                        }
+                                                                                        setRowPreview(newarrPreview);
+
+                                                                                        var newarr = [];
+                                                                                        newarr.push(campaign.ListDetails[0]);
+                                                                                        dispatch(setCreateUpdateCampaign({
+                                                                                            ...campaignState,
+                                                                                            campaign: {
+                                                                                                ...campaign,
+                                                                                                SetDiscountForMultiple: e
+                                                                                            },
+                                                                                            ListDetails: newarr,
+                                                                                            CampaignDetailValidation: '',
+                                                                                            IsOpenSaveToolbar: true,
+                                                                                        }))
+                                                                                    }
+
                                                                                 }}
                                                                             />
                                                                             <span className='show-tooltip show-tooltip-2'>
                                                                                 <Icon source={QuestionMarkMajor} color='base' />
-                                                                                <span className='tooltip2'>If multiple=3, customer can only receive discount when they buy 3,6,9,12,... products. If they buy 4, no discount will be applied</span>
+                                                                                <span className='tooltip2 right'>If multiple=3, customer can only receive discount when they buy 3,6,9,12,... products. If they buy 4, no discount will be applied</span>
                                                                             </span>
                                                                         </Stack>
+                                                                        <div className='break-line'></div>
                                                                     </div>
                                                                     <Stack wrap={false} alignment="leading" spacing="loose">
                                                                         <Stack.Item fill>
                                                                             <FormLayout>
                                                                                 <FormLayout.Group condensed>
-                                                                                    <TextStyle>{campaign.DiscountType === 1 ? 'Minimum Cart Quantity' : campaign.DiscountType === 2 ? 'Minimum Same Product Quantity' : campaign.DiscountType === 3 ? 'Minimum Same Variant Quantity' : 'Minimum Cart Quantity'}</TextStyle>
-                                                                                    <p>{campaign.PriceType === 1 ? '% discount' : campaign.PriceType === 2 ? 'Discount amount' : campaign.PriceType === 3 ? 'Fixed price per item' : '% discount'}</p>
+                                                                                    <TextStyle>{campaign.DiscountType === 1 ? 'Minimum Cart Quantity' : campaign.DiscountType === 2 ? 'Minimum Same Product Quantity' : campaign.DiscountType === 3 ? 'Minimum Same Variant Quantity' : 'Minimum Cart Quantity'}
+                                                                                    </TextStyle>
+                                                                                    <p style={campaign.SetDiscountForMultiple ? { marginLeft: '0' } : {}}>{campaign.PriceType === 1 ? '% discount' : campaign.PriceType === 2 ? 'Discount amount' : campaign.PriceType === 3 ? 'Fixed price per item' : '% discount'}</p>
                                                                                 </FormLayout.Group>
                                                                             </FormLayout>
                                                                         </Stack.Item>
 
                                                                     </Stack>
-                                                                    {campaign.ListDetails != null && campaign.ListDetails != undefined && campaign.ListDetails
-                                                                        .map(
-                                                                            ({ ID, Quantity, PercentOrPrice }, index) => (
-                                                                                <div className='node' key={index}>
-                                                                                    <Stack wrap={false} alignment="leading" spacing="loose">
-                                                                                        <Stack.Item fill>
-                                                                                            <FormLayout>
-                                                                                                <FormLayout.Group condensed>
-                                                                                                    <TextField
-                                                                                                        value={Quantity.toString()}
-                                                                                                        onChange={(e) => {
-                                                                                                            var newRows = rowsPreview.map((p, i) =>
-                                                                                                                (i == index ? { ...p, Quantity: e } : p)
-                                                                                                            )
-                                                                                                            setRowPreview(newRows);
-                                                                                                            dispatch(setCreateUpdateCampaign({
-                                                                                                                ...campaignState,
-                                                                                                                campaign: {
-                                                                                                                    ...campaign,
-                                                                                                                    ListDetails: campaign.ListDetails.map((p, i) => (i == index ? {
-                                                                                                                        ...p,
-                                                                                                                        Quantity: validateNumber(e.trim()) ? e.trim() : "0"
-                                                                                                                    } : p))
-                                                                                                                },
-                                                                                                                CampaignDetailValidation: "",
-                                                                                                                IsOpenSaveToolbar: true
-                                                                                                            }))
-                                                                                                        }}
-                                                                                                        type="text"
-                                                                                                    />
-                                                                                                    <div className='price-discount'>
+                                                                    {
+                                                                        campaign.SetDiscountForMultiple ? <>
+                                                                            {campaign.ListDetails != null && campaign.ListDetails != undefined && campaign.ListDetails[0] !== undefined && campaign.ListDetails[0] !== null ?
+                                                                                <>
+                                                                                    <div className='node-multiple'>
+                                                                                        <Stack wrap={false} alignment="leading" spacing="loose">
+                                                                                            <Stack.Item fill>
+                                                                                                <FormLayout>
+                                                                                                    <FormLayout.Group condensed>
                                                                                                         <TextField
-                                                                                                            value={PercentOrPrice.toString()}
+                                                                                                            value={campaign.ListDetails[0].Quantity.toString()}
                                                                                                             onChange={(e) => {
-
+                                                                                                                var newRows = rowsPreview.map((p, i) =>
+                                                                                                                    (i == 0 ? { ...p, Quantity: e } : p)
+                                                                                                                )
+                                                                                                                setRowPreview(newRows);
                                                                                                                 dispatch(setCreateUpdateCampaign({
                                                                                                                     ...campaignState,
                                                                                                                     campaign: {
                                                                                                                         ...campaign,
-                                                                                                                        ListDetails: campaign.ListDetails.map((p, i) => (i == index ? {
+                                                                                                                        ListDetails: campaign.ListDetails.map((p, i) => (i == 0 ? {
                                                                                                                             ...p,
-                                                                                                                            PercentOrPrice: validateNumber(e.trim()) ? e.trim() : "0"
+                                                                                                                            Quantity: validateNumber(e.trim()) ? e.trim() : "0"
                                                                                                                         } : p))
                                                                                                                     },
                                                                                                                     CampaignDetailValidation: "",
                                                                                                                     IsOpenSaveToolbar: true
                                                                                                                 }))
-                                                                                                                var newRows = rowsPreview.map((p, i) =>
-                                                                                                                    (i == index ? { ...p, PercentOrPrice: e } : p)
-                                                                                                                )
-                                                                                                                setRowPreview(newRows);
                                                                                                             }}
                                                                                                             type="text"
                                                                                                         />
-                                                                                                        <span className='unit'>{campaign.PriceType === 1 ? '%' : campaignState.Setting.Currency}</span>
-                                                                                                    </div>
+                                                                                                        <div className='price-discount'>
+                                                                                                            <TextField
+                                                                                                                value={campaign.ListDetails[0].PercentOrPrice.toString()}
+                                                                                                                onChange={(e) => {
 
-                                                                                                </FormLayout.Group>
-                                                                                            </FormLayout>
-                                                                                        </Stack.Item>
-                                                                                        <Button icon={DeleteMinor}
-                                                                                            onClick={() => {
-                                                                                                RemoveCampaignDetail(ID)
-                                                                                            }} accessibilityLabel="Remove item" />
-                                                                                    </Stack>
+                                                                                                                    dispatch(setCreateUpdateCampaign({
+                                                                                                                        ...campaignState,
+                                                                                                                        campaign: {
+                                                                                                                            ...campaign,
+                                                                                                                            ListDetails: campaign.ListDetails.map((p, i) => (i == 0 ? {
+                                                                                                                                ...p,
+                                                                                                                                PercentOrPrice: validateNumber(e.trim()) ? e.trim() : "0"
+                                                                                                                            } : p))
+                                                                                                                        },
+                                                                                                                        CampaignDetailValidation: "",
+                                                                                                                        IsOpenSaveToolbar: true
+                                                                                                                    }))
+                                                                                                                    var newRows = rowsPreview.map((p, i) =>
+                                                                                                                        (i == 0 ? { ...p, PercentOrPrice: e } : p)
+                                                                                                                    )
+                                                                                                                    setRowPreview(newRows);
+                                                                                                                }}
+                                                                                                                type="text"
+                                                                                                            />
+                                                                                                            <span className='unit'>{campaign.PriceType === 1 ? '%' : campaignState.Setting.Currency}</span>
+                                                                                                        </div>
+
+                                                                                                    </FormLayout.Group>
+                                                                                                </FormLayout>
+                                                                                            </Stack.Item>
+
+                                                                                            {/* <Button icon={DeleteMinor} onClick={() => {
+                                                                                                RemoveCampaignDetail(campaign.ListDetails[0].ID)
+                                                                                            }}
+                                                                                                accessibilityLabel="Remove item" /> */}
+                                                                                        </Stack>
+
+                                                                                    </div>
+                                                                                    <div className='node-multiple'>
+                                                                                        <Stack wrap={false} alignment="leading" spacing="loose">
+                                                                                            <Stack.Item fill>
+                                                                                                <FormLayout>
+                                                                                                    <FormLayout.Group condensed>
+                                                                                                        <div className='text-multiple'>
+                                                                                                            <TextField
+                                                                                                                label='Multiple'
+                                                                                                                id='Multiple'
+                                                                                                                value={campaign.Multiple !== null && campaign.Multiple !== undefined ? campaign.Multiple.toString() : '1'}
+                                                                                                                onChange={(e) => {
+                                                                                                                    dispatch(setCreateUpdateCampaign({
+                                                                                                                        ...campaignState,
+                                                                                                                        campaign: {
+                                                                                                                            ...campaign,
+                                                                                                                            Multiple: validateNumber(e.trim()) ? e.trim() : "1",
+                                                                                                                        },
+                                                                                                                        IsOpenSaveToolbar: true
+                                                                                                                    }))
+                                                                                                                }}
+                                                                                                                type="number"
+                                                                                                                min={0}
+                                                                                                            />
+                                                                                                        </div>
+                                                                                                        <div className='price-discount'>
+
+                                                                                                        </div>
+                                                                                                    </FormLayout.Group>
+                                                                                                </FormLayout>
+                                                                                            </Stack.Item>
+                                                                                        </Stack>
+
+                                                                                    </div>
+                                                                                    <div className='break-line'></div>
+                                                                                    <p className='gray-text'>Apply discount when customer buy {utils.MakeDynamicMultiple(campaign.ListDetails[0].Quantity, campaign.Multiple)} items</p>
+                                                                                </> : ''}
+                                                                            <InlineError message={campaignState.CampaignDetailValidation} fieldID="myFieldID" />
+                                                                        </> :
+                                                                            <>
+                                                                                {campaign.ListDetails != null && campaign.ListDetails != undefined && campaign.ListDetails
+                                                                                    .map(
+                                                                                        ({ ID, Quantity, PercentOrPrice }, index) => (
+                                                                                            <div className='node' key={index}>
+                                                                                                <Stack wrap={false} alignment="leading" spacing="loose">
+                                                                                                    <Stack.Item fill>
+                                                                                                        <FormLayout>
+                                                                                                            <FormLayout.Group condensed>
+                                                                                                                <TextField
+                                                                                                                    value={Quantity.toString()}
+                                                                                                                    onChange={(e) => {
+                                                                                                                        var newRows = rowsPreview.map((p, i) =>
+                                                                                                                            (i == index ? { ...p, Quantity: e } : p)
+                                                                                                                        )
+                                                                                                                        setRowPreview(newRows);
+                                                                                                                        dispatch(setCreateUpdateCampaign({
+                                                                                                                            ...campaignState,
+                                                                                                                            campaign: {
+                                                                                                                                ...campaign,
+                                                                                                                                ListDetails: campaign.ListDetails.map((p, i) => (i == index ? {
+                                                                                                                                    ...p,
+                                                                                                                                    Quantity: validateNumber(e.trim()) ? e.trim() : "0"
+                                                                                                                                } : p))
+                                                                                                                            },
+                                                                                                                            CampaignDetailValidation: "",
+                                                                                                                            IsOpenSaveToolbar: true
+                                                                                                                        }))
+                                                                                                                    }}
+                                                                                                                    type="text"
+                                                                                                                />
+                                                                                                                <div className='price-discount'>
+                                                                                                                    <TextField
+                                                                                                                        value={PercentOrPrice.toString()}
+                                                                                                                        onChange={(e) => {
+
+                                                                                                                            dispatch(setCreateUpdateCampaign({
+                                                                                                                                ...campaignState,
+                                                                                                                                campaign: {
+                                                                                                                                    ...campaign,
+                                                                                                                                    ListDetails: campaign.ListDetails.map((p, i) => (i == index ? {
+                                                                                                                                        ...p,
+                                                                                                                                        PercentOrPrice: validateNumber(e.trim()) ? e.trim() : "0"
+                                                                                                                                    } : p))
+                                                                                                                                },
+                                                                                                                                CampaignDetailValidation: "",
+                                                                                                                                IsOpenSaveToolbar: true
+                                                                                                                            }))
+                                                                                                                            var newRows = rowsPreview.map((p, i) =>
+                                                                                                                                (i == index ? { ...p, PercentOrPrice: e } : p)
+                                                                                                                            )
+                                                                                                                            setRowPreview(newRows);
+                                                                                                                        }}
+                                                                                                                        type="text"
+                                                                                                                    />
+                                                                                                                    <span className='unit'>{campaign.PriceType === 1 ? '%' : campaignState.Setting.Currency}</span>
+                                                                                                                </div>
+
+                                                                                                            </FormLayout.Group>
+                                                                                                        </FormLayout>
+                                                                                                    </Stack.Item>
+                                                                                                    {
+                                                                                                        index !== 0 ? <Button icon={DeleteMinor}
+                                                                                                            onClick={() => {
+                                                                                                                RemoveCampaignDetail(ID)
+                                                                                                            }} accessibilityLabel="Remove item" /> : (!campaign.SetDiscountForMultiple && campaign.ListDetails.length > 1 ?
+                                                                                                                <div style={{ width: '37px' }}>
+
+                                                                                                                </div> : '')
+                                                                                                    }
+                                                                                                </Stack>
+                                                                                            </div>
+
+                                                                                        ))}
+
+                                                                                <div className='node'>
+                                                                                    <Button primary onClick={() => {
+                                                                                        AddRule()
+                                                                                    }}>Add Rule</Button>
+                                                                                    <InlineError message={campaignState.CampaignDetailValidation} fieldID="myFieldID" />
+
                                                                                 </div>
+                                                                            </>
+                                                                    }
 
-                                                                            ))}
-
-                                                                    <div className='node'>
-                                                                        <Button primary onClick={() => {
-                                                                            AddRule()
-                                                                        }}>Add Rule</Button>
-                                                                        <InlineError message={campaignState.CampaignDetailValidation} fieldID="myFieldID" />
-
-                                                                    </div>
 
                                                                 </div>
 
@@ -1890,7 +2112,12 @@ const CreateUpdateCampaign = (props) => {
                                                                                             rowsPreview.map((item, index) => {
                                                                                                 return (
                                                                                                     <tr className="Polaris-DataTable__TableRow Polaris-DataTable--hoverable" key={index}>
-                                                                                                        <th className="Polaris-DataTable__Cell Polaris-DataTable__Cell--verticalAlignTop Polaris-DataTable__Cell--firstColumn" scope="row" style={{ fontSize: campaignState.Setting2.FontSizeItemInTable + 'px', color: campaignState.Setting2.TextColorItemInTable, backgroundColor: campaignState.Setting2.BackgroundColorItemInTable }}>{campaignState.Setting.TextBuy + ' ' + item.Quantity + campaignState.Setting.TextPlus}</th>
+                                                                                                        <th className="Polaris-DataTable__Cell Polaris-DataTable__Cell--verticalAlignTop Polaris-DataTable__Cell--firstColumn" scope="row" style={{ fontSize: campaignState.Setting2.FontSizeItemInTable + 'px', color: campaignState.Setting2.TextColorItemInTable, backgroundColor: campaignState.Setting2.BackgroundColorItemInTable }}>
+                                                                                                            {
+                                                                                                                campaign.SetDiscountForMultiple ?
+                                                                                                                    campaignState.Setting.TextBuy + ' ' + utils.MakeDynamicMultiple(campaign.ListDetails[0].Quantity, campaign.Multiple)
+                                                                                                                    : campaignState.Setting.TextBuy + ' ' + item.Quantity + campaignState.Setting.TextPlus
+                                                                                                            }</th>
                                                                                                         {
                                                                                                             campaign.PriceType != 3 ? <>
                                                                                                                 <td className="Polaris-DataTable__Cell Polaris-DataTable__Cell--verticalAlignTop" style={{ fontSize: campaignState.Setting2.FontSizeItemInTable + 'px', color: campaignState.Setting2.TextColorItemInTable, backgroundColor: campaignState.Setting2.BackgroundColorItemInTable }}>{(campaign.PriceType === 1 ? item.PercentOrPrice + '%' : campaign.PriceType === 2 ? item.PercentOrPrice + ' ' + campaignState.Setting.Currency : <></>)}</td>
@@ -1932,7 +2159,11 @@ const CreateUpdateCampaign = (props) => {
                                                                                                     return (
                                                                                                         <>
                                                                                                             <td className="Polaris-DataTable__Cell Polaris-DataTable__Cell--verticalAlignTop" key={index} style={{ fontSize: campaignState.Setting2.FontSizeItemInTable + 'px', color: campaignState.Setting2.TextColorItemInTable, backgroundColor: campaignState.Setting2.BackgroundColorItemInTable }}>
-                                                                                                                {campaignState.Setting.TextBuy + ' ' + item.Quantity + campaignState.Setting.TextPlus}
+                                                                                                                {
+                                                                                                                    campaign.SetDiscountForMultiple ?
+                                                                                                                        campaignState.Setting.TextBuy + ' ' + utils.MakeDynamicMultiple(campaign.ListDetails[0].Quantity, campaign.Multiple)
+                                                                                                                        : campaignState.Setting.TextBuy + ' ' + item.Quantity + campaignState.Setting.TextPlus
+                                                                                                                }
                                                                                                             </td>
                                                                                                         </>
                                                                                                     )
@@ -2015,7 +2246,13 @@ const CreateUpdateCampaign = (props) => {
                                                                                         <div className='card-orange' key={index} style={{ color: campaignState.Setting2.TextColorCard, fontSize: campaignState.Setting2.FontSizeCard + 'px' }}>
                                                                                             <div className="card-left-right" style={{ backgroundColor: campaignState.Setting2.BackgroundColorCard }}>
                                                                                                 <div className="card-inside">
-                                                                                                    <p className="buy" style={{ color: campaignState.Setting2.TextColorCard, fontSize: campaignState.Setting2.FontSizeCard + 'px' }}>{campaignState.Setting.TextBuy} {item.Quantity}{campaignState.Setting.TextPlus}</p>
+                                                                                                    <p className="buy" style={{ color: campaignState.Setting2.TextColorCard, fontSize: campaignState.Setting2.FontSizeCard + 'px' }}>
+                                                                                                        {
+                                                                                                            campaign.SetDiscountForMultiple ?
+                                                                                                                campaignState.Setting.TextBuy + ' ' + utils.MakeDynamicMultiple(campaign.ListDetails[0].Quantity, campaign.Multiple)
+                                                                                                                : campaignState.Setting.TextBuy + ' ' + item.Quantity + campaignState.Setting.TextPlus
+                                                                                                        }
+                                                                                                    </p>
                                                                                                     <p className="get" style={{ color: campaignState.Setting2.TextColorCard, fontSize: campaignState.Setting2.FontSizeCard + 'px' }}>{campaignState.Setting2.TextGet}</p>
                                                                                                     <p className="off-card" style={{ color: campaignState.Setting2.TextColorCard, fontSize: campaignState.Setting2.FontSizeCard + 'px' }}>{item.PercentOrPrice}{campaign.PriceType === 1 ? '%' : campaignState.Setting.Currency}{campaign.PriceType === 3 ? '/' + campaignState.Setting.TextEach : ' ' + campaignState.Setting2.TextOff}</p>
                                                                                                 </div>
@@ -2092,7 +2329,12 @@ const CreateUpdateCampaign = (props) => {
                                                                                         <div className='card-orange' key={index} style={{ color: campaignState.Setting2.TextColorCard, fontSize: campaignState.Setting2.FontSizeCard + 'px' }}>
                                                                                             <div className="card-four-side" style={{ backgroundColor: campaignState.Setting2.BackgroundColorCard }}>
                                                                                                 <div className="card-inside">
-                                                                                                    <p className="buy" style={{ color: campaignState.Setting2.TextColorCard, fontSize: campaignState.Setting2.FontSizeCard + 'px' }}>{campaignState.Setting.TextBuy} {item.Quantity}{campaignState.Setting.TextPlus}</p>
+                                                                                                    <p className="buy" style={{ color: campaignState.Setting2.TextColorCard, fontSize: campaignState.Setting2.FontSizeCard + 'px' }}>
+                                                                                                        {
+                                                                                                            campaign.SetDiscountForMultiple ?
+                                                                                                                campaignState.Setting.TextBuy + ' ' + utils.MakeDynamicMultiple(campaign.ListDetails[0].Quantity, campaign.Multiple)
+                                                                                                                : campaignState.Setting.TextBuy + ' ' + item.Quantity + campaignState.Setting.TextPlus
+                                                                                                        }</p>
                                                                                                     <p className="get" style={{ color: campaignState.Setting2.TextColorCard, fontSize: campaignState.Setting2.FontSizeCard + 'px' }}>{campaignState.Setting2.TextGet}</p>
                                                                                                     <p className="off-card" style={{ color: campaignState.Setting2.TextColorCard, fontSize: campaignState.Setting2.FontSizeCard + 'px' }}>{item.PercentOrPrice}{campaign.PriceType === 1 ? '%' : campaignState.Setting.Currency}{campaign.PriceType === 3 ? '/' + campaignState.Setting.TextEach : ' ' + campaignState.Setting2.TextOff}</p>
                                                                                                 </div>
@@ -2412,14 +2654,42 @@ const CreateUpdateCampaign = (props) => {
 
                     </>
             }
-            {campaignState.IsOpenSaveResult ? <Toast content={campaignState.MessageSaveResult} duration={2400} onDismiss={() => {
-                dispatch(setCreateUpdateCampaign({
-                    ...campaignState,
-                    IsOpenSaveResult: false
-                }))
-            }} /> : null}
-        </>
+            {
+                campaignState.IsOpenSaveResult ? <Toast content={campaignState.MessageSaveResult} duration={2400} onDismiss={() => {
+                    dispatch(setCreateUpdateCampaign({
+                        ...campaignState,
+                        IsOpenSaveResult: false
+                    }))
+                }} /> : null
+            }
+            <Modal
+                open={isShowPopupUpgrade}
+                onClose={() => {
+                    setIsShowPopupUpgrade(false)
 
+                }}
+                title="This feature is only available in higher plan. Do you want to upgrade?"
+                primaryAction={{
+                    content: 'Upgrade',
+                    onAction: () => {
+                        setIsShowPopupUpgrade(false)
+                        dispatch(setMenu(moreAppConfig.Menu.PLAN))
+                        history.push('/plan?shop=' + config.shop + '&token=' + config.token);
+                        dispatch(setURL('plan'));
+                    },
+                }}
+                secondaryActions={[
+                    {
+                        content: 'Cancel',
+                        onAction: () => {
+                            setIsShowPopupUpgrade(false)
+                        },
+                    },
+                ]}
+            >
+
+            </Modal>
+        </>
     )
 }
 

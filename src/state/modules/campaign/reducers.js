@@ -76,6 +76,8 @@ const INITIAL_STATE = {
       LimitCustomerLifetime: false,
       OnlyShowDiscountTaggedCustomer: false,
       ListTaggedCustomer: [],
+      SetDiscountForMultiple: false,
+      Multiple: 1
     },
     Setting: {
       ID: 0,
@@ -448,7 +450,7 @@ const reducer = (state = INITIAL_STATE, action) => {
           MessageSaveResult: action.payload.Message,
         }
       };
-      case types.SET_IS_DELETE_LOADING:
+    case types.SET_IS_DELETE_LOADING:
       return {
         ...state,
         ListCampaign: {
@@ -456,7 +458,7 @@ const reducer = (state = INITIAL_STATE, action) => {
           IsDeleteLoading: action.payload,
         },
       };
-      case types.SET_IS_PAGINATE_LOADING:
+    case types.SET_IS_PAGINATE_LOADING:
       return {
         ...state,
         ListCampaign: {
