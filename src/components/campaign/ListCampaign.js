@@ -182,6 +182,7 @@ const ListCampaign = (props) => {
 
 
     function UpdateCampaignStatus(campaign) {
+        dispatch(setIsPaginateLoading(true));
         axios.post(config.rootLink + '/FrontEnd/UpdateCampaignStatus', { id: campaign.ID, shop: config.shop, status: campaign.Active, plannumber: appState.PlanNumber })
             .then(function (response) {
                 if (response.data.IsSuccess) {
@@ -212,10 +213,11 @@ const ListCampaign = (props) => {
                         setAlert(null);
                     }} />);
                 }
-
+                dispatch(setIsPaginateLoading(false));
             })
             .catch(function (error) {
                 // handle error
+                dispatch(setIsPaginateLoading(false));
                 console.log(error);
             })
     }

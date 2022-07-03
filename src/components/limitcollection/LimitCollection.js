@@ -1086,7 +1086,7 @@ const LimitCollection = () => {
                 title={"Do you want to " + BulkActionType + " limit purchase for " + limitCollectionState.Paginate.CurrentItems.filter(p => p.IsChecked).length + " selected collections?"}
                 primaryAction={{
                     content: BulkActionType.charAt(0).toUpperCase() + BulkActionType.slice(1),
-                    loading: limitCollectionState.IsPaginateLoading,
+                    loading: limitCollectionState.IsSaveLoading,
                     onAction: handleBulkAction,
                 }}
                 secondaryActions={[

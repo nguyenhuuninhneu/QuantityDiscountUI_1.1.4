@@ -140,7 +140,7 @@ const reducer = (state = INITIAL_STATE, action) => {
         ...state,
         ListLimitOrder: {
           ...state.ListLimitOrder,
-          IsOpenSaveToolbar: false,
+          // IsOpenSaveToolbar: false,
           IsSaveLoading: false,
           IsLoadingPage: false,
           IsOpenSaveResult: true,

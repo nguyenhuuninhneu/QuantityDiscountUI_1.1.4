@@ -208,7 +208,7 @@ const reducer = (state = INITIAL_STATE, action) => {
         },
         CreateUpdateLimitPurchase: {
           ...state.CreateUpdateLimitPurchase,
-          IsOpenSaveToolbar: false,
+          // IsOpenSaveToolbar: false,
           IsLoadingPage: false,
           IsOpenSaveResult: true,
           IsOpenCreateUpdateModal: false,
@@ -282,7 +282,7 @@ const reducer = (state = INITIAL_STATE, action) => {
         },
         CreateUpdateLimitPurchase: {
           ...state.CreateUpdateLimitPurchase,
-          IsOpenSaveToolbar: false,
+          // IsOpenSaveToolbar: false,
           IsLoadingPage: false,
           IsOpenSaveResult: true,
           IsOpenCreateUpdateModal: false,
@@ -430,7 +430,7 @@ const reducer = (state = INITIAL_STATE, action) => {
         },
         CreateUpdateLimitPurchase: {
           ...state.CreateUpdateLimitPurchase,
-          IsOpenSaveToolbar: false,
+          // IsOpenSaveToolbar: false,
           IsLoadingPage: false,
           IsOpenSaveResult: true,
           IsOpenCreateUpdateModal: false,

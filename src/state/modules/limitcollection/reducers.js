@@ -248,7 +248,7 @@ const reducer = (state = INITIAL_STATE, action) => {
         },
         CreateUpdateLimitCollection: {
           ...state.CreateUpdateLimitCollection,
-          IsOpenSaveToolbar: false,
+          // IsOpenSaveToolbar: false,
           IsSaveLoading: false,
           IsLoadingPage: false,
           IsOpenSaveResult: true,
@@ -323,7 +323,7 @@ const reducer = (state = INITIAL_STATE, action) => {
         ...state,
         CreateUpdateLimitCollection: {
           ...state.CreateUpdateLimitCollection,
-          IsOpenSaveToolbar: false,
+          // IsOpenSaveToolbar: false,
           IsSaveLoading: false,
           IsLoadingPage: false,
           IsOpenSaveResult: true,
@@ -481,7 +481,7 @@ const reducer = (state = INITIAL_STATE, action) => {
         },
         CreateUpdateLimitCollection: {
           ...state.CreateUpdateLimitCollection,
-          IsOpenSaveToolbar: false,
+          // IsOpenSaveToolbar: false,
           IsLoadingPage: false,
           IsOpenSaveResult: true,
           IsOpenCreateUpdateModal: false,

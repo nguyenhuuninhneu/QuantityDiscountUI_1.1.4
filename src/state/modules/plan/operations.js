@@ -113,10 +113,16 @@ export const ChoosePlan = (plannumber) => {
         if (result.IsSuccess) {
           if (result.ConfirmationUrl != '' && result.ConfirmationUrl != undefined) {
             // window.open(result.ConfirmationUrl, "_blank");
-            window.location.href = result.ConfirmationUrl;
+            setTimeout(function () {
+              window.location.href = result.ConfirmationUrl;
+            }, 2000);
+
           }
-          else{
-            window.location.reload();
+          else {
+            setTimeout(function () {
+              window.location.reload();
+
+            }, 2000);
           }
           dispatch(actions.setChoosePlanCompleted(result));
           dispatch(appAction.setPlanNumber(plannumber));

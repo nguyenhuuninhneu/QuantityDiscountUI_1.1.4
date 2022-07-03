@@ -100,7 +100,7 @@ const reducer = (state = INITIAL_STATE, action) => {
         ...state,
         ListExperience: {
           ...state.ListExperience,
-          IsOpenSaveToolbar: false,
+          // IsOpenSaveToolbar: false,
           IsSaveLoading: false,
           IsLoadingPage: false,
           IsOpenSaveResult: true,

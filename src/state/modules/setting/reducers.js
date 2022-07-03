@@ -229,7 +229,7 @@ const reducer = (state = INITIAL_STATE, action) => {
         ...state,
         ListSetting: {
           ...state.ListSetting,
-          IsOpenSaveToolbar: false,
+          // IsOpenSaveToolbar: false,
           IsSaveLoading: false,
           IsLoadingPage: false,
           IsOpenSaveResult: true,
@@ -256,7 +256,7 @@ const reducer = (state = INITIAL_STATE, action) => {
         ...state,
         ListSetting: {
           ...state.ListSetting,
-          IsOpenSaveToolbar: false,
+          // IsOpenSaveToolbar: false,
           IsSaveLoading: false,
           IsLoadingPage: false,
           IsOpenSaveResult: true,
@@ -281,7 +281,7 @@ const reducer = (state = INITIAL_STATE, action) => {
         ...state,
         ListSetting: {
           ...state.ListSetting,
-          IsOpenSaveToolbar: false,
+          // IsOpenSaveToolbar: false,
           IsSaveLoading: false,
           IsLoadingPage: false,
           IsOpenSaveResult: true,
@@ -306,7 +306,7 @@ const reducer = (state = INITIAL_STATE, action) => {
         ...state,
         ListSetting: {
           ...state.ListSetting,
-          IsOpenSaveToolbar: false,
+          // IsOpenSaveToolbar: false,
           IsSaveLoading: false,
           IsLoadingPage: false,
           IsOpenSaveResult: true,

@@ -69,7 +69,7 @@ const reducer = (state = INITIAL_STATE, action) => {
         ...state,
         Plan: {
           ...state.Plan,
-          IsOpenSaveToolbar: false,
+          // IsOpenSaveToolbar: false,
           IsOpenStartFreeTrial: false,
           IsLoadingPage: false,
           IsOpenSaveResult: true,
@@ -95,7 +95,7 @@ const reducer = (state = INITIAL_STATE, action) => {
         ...state,
         Plan: {
           ...state.Plan,
-          IsOpenSaveToolbar: false,
+          // IsOpenSaveToolbar: false,
           IsLoadingPage: false,
           IsOpenSaveResult: true,
           IsOpenUpgrade: false,
@@ -121,7 +121,7 @@ const reducer = (state = INITIAL_STATE, action) => {
         ...state,
         Plan: {
           ...state.Plan,
-          IsOpenSaveToolbar: false,
+          // IsOpenSaveToolbar: false,
           IsOpenDowngrade: false,
           IsLoadingPage: false,
           IsOpenSaveResult: true,
@@ -147,7 +147,7 @@ const reducer = (state = INITIAL_STATE, action) => {
         ...state,
         Plan: {
           ...state.Plan,
-          IsOpenSaveToolbar: false,
+          // IsOpenSaveToolbar: false,
           IsLoadingPage: false,
           IsOpenSaveResult: true,
           IsOpenChoosePlan: false,

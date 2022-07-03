@@ -344,7 +344,7 @@ const reducer = (state = INITIAL_STATE, action) => {
         ...state,
         CreateUpdateCampaign: {
           ...state.CreateUpdateCampaign,
-          IsOpenSaveToolbar: false,
+          // IsOpenSaveToolbar: false,
           IsShowSendSupport: false,
           IsSaveLoading: false,
           IsLoadingPage: false,
@@ -434,7 +434,7 @@ const reducer = (state = INITIAL_STATE, action) => {
           IsSaveLoading: false,
           IsLoadingPage: false,
           IsShowSendSupport: false,
-          IsOpenSaveResult: true,
+          IsOpenSaveResult: !action.payload.IsSuccess,
           MessageSaveResult: action.payload.IsSuccess ? 'Send the support request is saved successfully.' : action.payload.Message,
 
         }
@@ -444,7 +444,7 @@ const reducer = (state = INITIAL_STATE, action) => {
         ...state,
         CreateUpdateCampaign: {
           ...state.CreateUpdateCampaign,
-          IsOpenSaveToolbar: false,
+          // IsOpenSaveToolbar: false,
           IsShowSendSupport: false,
           IsSaveLoading: false,
           MessageSaveResult: action.payload.Message,
