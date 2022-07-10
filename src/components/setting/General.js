@@ -84,7 +84,7 @@ function General() {
         settingState.IsLoadingPage ? <Loading></Loading>
           :
           <>
-            <FixTheConflict IsShowButtonClose={false}/>
+            <FixTheConflict IsShowButtonClose={false} Disappear={false} />
             <div className='section general'>
               <div className='activate'>
                 <div className="Polaris-Card" style={{ backgroundColor: '#EBF9FC', marginTop: '15px', marginBottom: '15px' }}>

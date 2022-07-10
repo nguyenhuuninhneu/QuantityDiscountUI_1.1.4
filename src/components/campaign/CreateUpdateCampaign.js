@@ -1549,8 +1549,8 @@ const CreateUpdateCampaign = (props) => {
                                                         <Card.Section>
                                                             <div className="campaign-detail" ref={myRefCampaignDetail}>
                                                                 <Heading size="small">3. Campaign Detail</Heading>
-                                                                <div className='timeline'>
-                                                                    <div className='item'>
+                                                                <div className='timeline near-icon'>
+                                                                    <div className='item item-near'>
                                                                         <Stack>
                                                                             <Checkbox
                                                                                 label="Set discount for multiples"

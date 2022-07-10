@@ -230,7 +230,7 @@ const ListCampaign = (props) => {
             {campaignState.listLoading
                 ? <Loading></Loading>
                 : <>
-                    <FixTheConflict IsShowButtonClose={true} />
+                    <FixTheConflict IsShowButtonClose={true} Disappear={true}/>
                     <div className='campaign-products'>
                         <div className='campaign-products-list'>
                             <div className=''>

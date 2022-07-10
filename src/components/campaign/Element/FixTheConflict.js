@@ -24,7 +24,9 @@ function FixTheConflict(props) {
                 setAlert(<Toast content={'Fix the conflict ' + (result ? 'successfully' : 'has error')} duration={2400} onDismiss={() => {
                     setAlert(null);
                 }} />);
-                setIsHideNotification(true);
+                if(props.Disappear){
+                    setIsHideNotification(true);
+                }
             })
             .catch(function (error) {
                 const errorMsg = error.message;
@@ -38,7 +40,8 @@ function FixTheConflict(props) {
     return <>
         {
             !IsHideNotification ? <>
-                <div className="Polaris-Card fix-conflict" style={{ backgroundColor: '#EBF9FC', marginTop: '15px', marginBottom: '15px', border: '1px solid #008060' }}>
+            {/*, border: '1px solid #008060'  */}
+                <div className="Polaris-Card fix-conflict" style={{  backgroundColor: '#EBF9FC', marginTop: '15px', marginBottom: '15px'}}>
                     <div className="Polaris-CalloutCard__Container">
                         <div className="Polaris-Card__Section relative">
                             {props.IsShowButtonClose ? <>

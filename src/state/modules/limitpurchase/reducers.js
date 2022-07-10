@@ -11,7 +11,7 @@ const INITIAL_STATE = {
     TextSearchCollection: '',
     ListLimitPurcharseSelected: [],
     IsCheckAllLimitPurcharse: false,
-    IsOpenSearchCollection:false,
+    IsOpenSearchCollection: false,
     ProductSelected: 0,
     IsLoadingPage: false,
     IsSaveLoading: false,
@@ -304,6 +304,7 @@ const reducer = (state = INITIAL_STATE, action) => {
               Max: action.payload.listLimitPurchaseUpdate.filter(k => k.ProductID == p.ProductCode)[0]?.Max,
               ApplyLimitCustomerLifetime: action.payload.listLimitPurchaseUpdate.filter(k => k.ProductID == p.ProductCode)[0]?.ApplyLimitCustomerLifetime,
               IsLimitPurchaseWholeProduct: action.payload.listLimitPurchaseUpdate.filter(k => k.ProductID == p.ProductCode)[0]?.IsLimitPurchaseWholeProduct,
+              IsEnabled: action.payload.listLimitPurchaseUpdate.filter(k => k.ProductID == p.ProductCode)[0]?.IsEnabled,
               IsChecked: false,
             }
             : p)
@@ -316,6 +317,7 @@ const reducer = (state = INITIAL_STATE, action) => {
               Max: action.payload.listLimitPurchaseUpdate.filter(k => k.ProductID == p.ProductCode)[0]?.Max,
               ApplyLimitCustomerLifetime: action.payload.listLimitPurchaseUpdate.filter(k => k.ProductID == p.ProductCode)[0]?.ApplyLimitCustomerLifetime,
               IsLimitPurchaseWholeProduct: action.payload.listLimitPurchaseUpdate.filter(k => k.ProductID == p.ProductCode)[0]?.IsLimitPurchaseWholeProduct,
+              IsEnabled: action.payload.listLimitPurchaseUpdate.filter(k => k.ProductID == p.ProductCode)[0]?.IsEnabled,
               IsChecked: false,
             }
             : p));
@@ -325,7 +327,7 @@ const reducer = (state = INITIAL_STATE, action) => {
           (listProductCodeAdd.includes(p.ProductCode) ?
             {
               ...p,
-              ID: action.payload.listLimitPurchaseUpdate.filter(k => k.ProductID == p.ProductCode)[0]?.ID,
+              ID: p.Min !== null ? action.payload.listLimitPurchaseUpdate.filter(k => k.ProductID == p.ProductCode)[0]?.ID : null,
               IsEnabled: action.payload.listLimitPurchaseUpdate.filter(k => k.ProductID == p.ProductCode)[0]?.IsEnabled,
               IsChecked: false,
             }
@@ -334,7 +336,7 @@ const reducer = (state = INITIAL_STATE, action) => {
           ListLimit = state.ListLimitPurchase.limitpurchases.map((p, i) => (listProductCodeAdd.includes(p.ProductCode) ?
             {
               ...p,
-              ID: action.payload.listLimitPurchaseUpdate.filter(k => k.ProductID == p.ProductCode)[0]?.ID,
+              ID: p.Min !== null ? action.payload.listLimitPurchaseUpdate.filter(k => k.ProductID == p.ProductCode)[0]?.ID : null,
               IsEnabled: action.payload.listLimitPurchaseUpdate.filter(k => k.ProductID == p.ProductCode)[0]?.IsEnabled,
               IsChecked: false,
             }
@@ -345,7 +347,7 @@ const reducer = (state = INITIAL_STATE, action) => {
           (listProductCodeAdd.includes(p.ProductCode) ?
             {
               ...p,
-              ID: action.payload.listLimitPurchaseUpdate.filter(k => k.ProductID == p.ProductCode)[0]?.ID,
+              ID: p.Min !== null ? action.payload.listLimitPurchaseUpdate.filter(k => k.ProductID == p.ProductCode)[0]?.ID : null,
               IsEnabled: action.payload.listLimitPurchaseUpdate.filter(k => k.ProductID == p.ProductCode)[0]?.IsEnabled,
               IsChecked: false,
             }
@@ -354,9 +356,9 @@ const reducer = (state = INITIAL_STATE, action) => {
           ListLimit = state.ListLimitPurchase.limitpurchases.map((p, i) => (listProductCodeAdd.includes(p.ProductCode) ?
             {
               ...p,
-              ID: action.payload.listLimitPurchaseUpdate.filter(k => k.ProductID == p.ProductCode)[0]?.ID,
-               IsEnabled: action.payload.listLimitPurchaseUpdate.filter(k => k.ProductID == p.ProductCode)[0]?.IsEnabled,
-               IsChecked: false,
+              ID: p.Min !== null ? action.payload.listLimitPurchaseUpdate.filter(k => k.ProductID == p.ProductCode)[0]?.ID : null,
+              IsEnabled: action.payload.listLimitPurchaseUpdate.filter(k => k.ProductID == p.ProductCode)[0]?.IsEnabled,
+              IsChecked: false,
             }
             : p));
           break;
