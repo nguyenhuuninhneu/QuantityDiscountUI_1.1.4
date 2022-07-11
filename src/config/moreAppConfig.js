@@ -68,5 +68,9 @@ const moreAppConfig = {
         EnabledSelected: 2,
         DeleteAllSelected: 3
     },
+    TargetType : {
+        "line_item":"Line item",
+        "shipping_line":"Shipping fee",
+    }
 }
 export default moreAppConfig;

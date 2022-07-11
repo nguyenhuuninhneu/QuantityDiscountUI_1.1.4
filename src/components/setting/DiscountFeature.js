@@ -1880,12 +1880,14 @@ function DiscountFeature() {
                       'text',
                       'text',
                       'text',
+                      'text',
                     ]}
                     headings={[
                       'Discount code',
                       'Discount type',
                       'Discount value',
                       'Minimum requirement',
+                      'Target type',
                     ]}
                     // footerContent={`Showing ${currentItems.length} of ${reportState..length} results`}
                     rows={settingState.DiscountDetail != null && settingState.DiscountDetail.length > 0 ? settingState.DiscountDetail.map((discount, index) => {
@@ -1893,7 +1895,8 @@ function DiscountFeature() {
                         discount.DiscountCode,
                         discount.DiscountType,
                         discount.Value,
-                        discount.MinimumOrderAmount
+                        discount.MinimumOrderAmount,
+                        moreAppConfig.TargetType[discount.TargetType],
 
                       ];
                     }) : []}
