@@ -913,6 +913,7 @@ const LimitCollection = () => {
                                 <div className='cb'>
                                 </div>
                                 <span className='rule-max-zero'>This name will be shown in alert popup for customer. For example “You have to choose minimum of 3 items in {createLimitCollectionState.limitcollection.CollectName}”</span>
+                                <div style={{ marginBottom: '5px' }}>Min limit purchase</div>
 
                                 <div className='item'>
                                     <Select
@@ -978,7 +979,9 @@ const LimitCollection = () => {
                                 </div>
                                 <div className='cb break-line-2'>
                                 </div>
+                                <div style={{ marginBottom: '5px' }}>Max limit purchase</div>
                                 <div className='item'>
+                                
                                     <Select
                                         label="Max limit purchase"
                                         options={moreAppConfig.LimitTypeMax}

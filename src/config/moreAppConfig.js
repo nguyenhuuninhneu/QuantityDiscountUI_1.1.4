@@ -55,11 +55,11 @@ const moreAppConfig = {
     ExpandMenu: ',discountcampaign,',
     LimitTypeMin: [
         { label: 'Limit quantity', value: 0 },
-        { label: 'Litmit value purchase', value: 1 },
+        { label: 'Limit value purchase', value: 1 },
     ],
     LimitTypeMax: [
         { label: 'Limit quantity', value: 0 },
-        { label: 'Litmit value purchase', value: 1 },
+        { label: 'Limit value purchase', value: 1 },
     ],
     CollectNameValidationText:'Collection name is required.',
     BulkAction: {
